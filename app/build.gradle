@@ -84,4 +84,8 @@ dependencies {
 
     //Powerful and flexible RecyclerAdapter
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.10'
+
+    // navigation依赖 ui 和 fragment
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.3'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
 }

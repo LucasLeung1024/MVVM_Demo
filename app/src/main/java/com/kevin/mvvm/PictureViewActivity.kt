@@ -8,7 +8,7 @@ import com.kevin.mvvm.databinding.ActivityPictureViewBinding
 import com.kevin.mvvm.viewmodel.PictureViewModel
 
 class PictureViewActivity : AppCompatActivity() {
-    
+
     //ViewModel
     private val vm by lazy { ViewModelProvider(this)[PictureViewModel::class.java] }
     private lateinit var binding: ActivityPictureViewBinding
