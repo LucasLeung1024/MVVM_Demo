@@ -10,6 +10,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven { url 'https://jitpack.io' }  //这个不加的话 BaseQuickAdapter找不到
     }
 }
 rootProject.name = "MVVM"
