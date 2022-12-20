@@ -1,16 +1,15 @@
 package com.kevin.mvvm.activity
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.appbar.AppBarLayout
 import com.kevin.mvvm.adapter.WallPaperAdapter
 import com.kevin.mvvm.databinding.ActivityMainBinding
-import com.kevin.mvvm.model.WallPaperResponse
 import com.kevin.mvvm.viewmodel.MainViewModel
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     //viewBinding
     private lateinit var binding: ActivityMainBinding
@@ -62,6 +61,10 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         })
-
     }
+
+    fun toHome(view: View?) {
+        jumpActivity(HomeActivity::class.java)
+    }
+
 }

@@ -30,14 +30,12 @@ class NewsFragment : Fragment() {
         viewModel = ViewModelProvider(this)[NewsViewModel::class.java]
         _binding = FragmentNewsBinding.inflate(inflater,container,false)
 
-
-
         //获取新闻数据
         binding.rv.layoutManager = LinearLayoutManager(context)
         //数据刷新
         viewModel.news.observe(viewLifecycleOwner){ result->
             val x = result.getOrNull()
-            if(x!=null) binding.rv.adapter = NewsAdapter(x?.result?.data!!)
+            if(x!=null) binding.rv.adapter = NewsAdapter(x.result?.data!!)
         }
 
         return  binding.root
