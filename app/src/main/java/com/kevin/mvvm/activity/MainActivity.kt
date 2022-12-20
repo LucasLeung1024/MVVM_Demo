@@ -1,4 +1,4 @@
-package com.kevin.mvvm
+package com.kevin.mvvm.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -23,23 +23,16 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        vm.getBiYing()
-        vm.biying.observe(this) { result ->
-            val biYingResponse = result.getOrNull()
-            val imageUrl = biYingResponse!!.images!![0].url
-            binding.image.setBiyingUrl(binding.image, imageUrl!!)
+        vm.biying.observe(this) { result->
+            val urlString = result.getOrNull()?.images!![0].url
+            binding.image.setBiyingUrl(binding.image, urlString!!)
         }
 
         initView()
         //热门壁纸 网络请求
-        vm.getWallPaper()
         vm.wallPaper.observe(this) { result->
-            val wallPaper = result.getOrNull()
-            if(wallPaper != null) {
-                val vertical = wallPaper.res?.vertical
-                binding.rv.adapter =
-                    WallPaperAdapter(vertical as MutableList<WallPaperResponse.ResBean.VerticalBean>)
-            }
+            val verticalList = result.getOrNull()?.res?.vertical!!
+            binding.rv.adapter = WallPaperAdapter(verticalList)
         }
 
     }

@@ -1,16 +1,14 @@
-package com.kevin.mvvm
+package com.kevin.mvvm.activity
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.kevin.mvvm.databinding.ActivityLoginBinding
 import com.kevin.mvvm.model.User
 import com.kevin.mvvm.viewmodel.LoginViewModel
-import com.kevin.mvvm.viewmodel.MainViewModel
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : BaseActivity() {
 
     //viewBinding
     private lateinit var binding: ActivityLoginBinding

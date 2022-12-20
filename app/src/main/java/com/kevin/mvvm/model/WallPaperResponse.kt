@@ -6,7 +6,7 @@ class WallPaperResponse {
     var code = 0
 
     class ResBean {
-        var vertical: List<VerticalBean>? = null
+        var vertical: MutableList<VerticalBean>? = null
 
         class VerticalBean {
             var preview: String? = null

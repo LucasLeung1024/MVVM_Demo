@@ -7,8 +7,10 @@ import android.widget.ImageView
 import androidx.annotation.Nullable
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.imageview.ShapeableImageView
 import com.kevin.mvvm.BaseApplication
+import com.kevin.mvvm.R
 
 /**
  * 自定义View
@@ -16,7 +18,11 @@ import com.kevin.mvvm.BaseApplication
  */
 class CustomImageView(context: Context?, @Nullable attrs: AttributeSet?) : ShapeableImageView(context!!, attrs) {
 
-    //companion object {
+    private val OPTIONS: RequestOptions = RequestOptions()
+        .placeholder(R.drawable.wallpaper_bg) //图片加载出来前，显示的图片
+        .fallback(R.drawable.wallpaper_bg) //url为空的时候,显示的图片
+        .error(R.mipmap.ic_loading_failed) //图片加载失败后，显示的图片
+
     /**
      * 必应壁纸  因为拿到的url不完整，因此需要做一次地址拼接
      * @param imageView 图片视图
@@ -26,7 +32,7 @@ class CustomImageView(context: Context?, @Nullable attrs: AttributeSet?) : Shape
     fun setBiyingUrl(imageView: ImageView?, url: String) {
         val assembleUrl = "http://cn.bing.com$url"
         Log.d("", assembleUrl)
-        Glide.with(BaseApplication.context).load(assembleUrl)
+        Glide.with(BaseApplication.context).load(assembleUrl).apply(OPTIONS)
             .into(imageView!!)
     }
 
@@ -39,5 +45,4 @@ class CustomImageView(context: Context?, @Nullable attrs: AttributeSet?) : Shape
     fun setNetworkUrl(imageView: ImageView?, url: String?) {
         Glide.with(BaseApplication.context).load(url).into(imageView!!)
     }
-    // }
 }

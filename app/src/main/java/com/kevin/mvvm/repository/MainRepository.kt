@@ -11,7 +11,6 @@ import com.kevin.mvvm.utils.Constant
 import com.kevin.mvvm.utils.EasyDate
 import com.kevin.mvvm.utils.MVUtils
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 object MainRepository: BaseRepository() {
     private val TAG = MainRepository::class.java.simpleName
@@ -26,62 +25,56 @@ object MainRepository: BaseRepository() {
      */
     lateinit var wallPaper: WallPaperResponse
 
-    suspend fun getBiYing():BiYingResponse {
-        withContext(Dispatchers.IO) {
-            //今日此接口是否已请求
-            if (MVUtils.getBoolean(Constant.IS_TODAY_REQUEST)) {
-                if (EasyDate.timestamp <= MVUtils.getLong(Constant.REQUEST_TIMESTAMP)) {
-                    //当前时间未超过次日0点，从本地获取
-                    dailyPic = getLocalDB()
-                } else {
-                    //大于则数据需要更新，从网络获取
-                    Log.d(TAG, "从网络中获取1")
-                    dailyPic = NetworkRequest.getDailyPic()
-                    //保存到本地数据库
-                    savPics(dailyPic)
-                }
+    fun getBiYing() = fire(Dispatchers.IO) {
+        //今日此接口是否已请求
+        if (MVUtils.getBoolean(Constant.IS_TODAY_REQUEST)) {
+            if (EasyDate.timestamp <= MVUtils.getLong(Constant.REQUEST_TIMESTAMP)) {
+                //当前时间未超过次日0点，从本地获取
+                dailyPic = getLocalDB()
             } else {
-                Log.d(TAG, "从网络中获取2")
-                //没有请求过接口 或 当前时间，从网络获取
+                //大于则数据需要更新，从网络获取
+                Log.d(TAG, "从网络中获取1")
                 dailyPic = NetworkRequest.getDailyPic()
-                //存储到本地数据库中，并记录今日已请求了数据
+                //保存到本地数据库
                 savPics(dailyPic)
             }
-//        if (dailyPic.images?.isNotEmpty() == true) {
-//            Result.success(dailyPic)
-//        } else {
-//            Result.failure(RuntimeException("BiYing Error"))
-//        }
+        } else{
+            Log.d(TAG, "从网络中获取2")
+            //没有请求过接口 或 当前时间，从网络获取
+            dailyPic = NetworkRequest.getDailyPic()
+            //存储到本地数据库中，并记录今日已请求了数据
+            savPics(dailyPic)
         }
-        return dailyPic
+        if (dailyPic.images?.isNotEmpty() == true) {
+            Result.success(dailyPic)
+        } else {
+            Result.failure(RuntimeException("BiYing Error"))
+        }
     }
 
-    suspend fun getWallPaper(): WallPaperResponse {
-        withContext(Dispatchers.IO) {
-            //今日此接口是否已请求
-            if (MVUtils.getBoolean(Constant.IS_TODAY_REQUEST_WALLPAPER)) {
-                if (EasyDate.timestamp <= MVUtils.getLong(Constant.REQUEST_TIMESTAMP_WALLPAPER)) {
-                    //当前时间未超过次日0点，从本地获取
-                    wallPaper = getLocalDBForWallPaper()
-                } else {
-                    //大于则数据需要更新，从网络获取
-                    wallPaper = NetworkRequest.getWallPaper()
-                    //保存到本地数据库
-                    saveWallPaper(wallPaper)
-                }
+    fun getWallPaper() = fire(Dispatchers.IO) {
+        //今日此接口是否已请求
+        if (MVUtils.getBoolean(Constant.IS_TODAY_REQUEST_WALLPAPER)) {
+            if (EasyDate.timestamp <= MVUtils.getLong(Constant.REQUEST_TIMESTAMP_WALLPAPER)) {
+                //当前时间未超过次日0点，从本地获取
+                wallPaper = getLocalDBForWallPaper()
             } else {
-                //没有请求过接口 或 当前时间，从网络获取
+                //大于则数据需要更新，从网络获取
                 wallPaper = NetworkRequest.getWallPaper()
-                //存储到本地数据库中，并记录今日已请求了数据
+                //保存到本地数据库
                 saveWallPaper(wallPaper)
             }
-//        if (wallPaper.msg == "success") {
-//            return wallPaper
-//        } else {
-//            Result.failure(RuntimeException("WallPaper Error"))
-//        }
+        } else{
+            //没有请求过接口 或 当前时间，从网络获取
+            wallPaper = NetworkRequest.getWallPaper()
+            //存储到本地数据库中，并记录今日已请求了数据
+            saveWallPaper(wallPaper)
         }
-        return wallPaper
+        if (wallPaper.msg == "success") {
+            Result.success(wallPaper)
+        } else {
+            Result.failure(RuntimeException("WallPaper Error"))
+        }
     }
 
     /**

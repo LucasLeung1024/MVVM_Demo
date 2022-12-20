@@ -25,9 +25,9 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="Theme.MVVM_1.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.MVVM.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="Theme.MVVM_1.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="Theme.MVVM.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <!--主页面样式-->
     <style name="MainTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -46,5 +46,16 @@
         <item name="android:windowTranslucentStatus">false</item>
         <item name="android:windowTranslucentNavigation">true</item>
     </style>
+
+    <style name="SplashTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:statusBarColor" tools:targetApi="lollipop">#00FFFFFF</item><!--设置状态栏的颜色-->
+    </style>
+
+    <!-- 圆角图片 -->
+    <style name="roundedImageStyle_6">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">6dp</item>
+    </style>
+
 
 </resources>
