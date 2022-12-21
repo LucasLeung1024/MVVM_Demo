@@ -8,14 +8,14 @@ import com.kevin.mvvm.R
 import com.kevin.mvvm.databinding.ActivityHomeBinding
 import com.kevin.mvvm.utils.Constant
 import com.kevin.mvvm.utils.MVUtils
-import com.kevin.mvvm.viewmodel.MainViewModel
+import com.kevin.mvvm.viewmodel.HomeViewModel
 
 class HomeActivity : BaseActivity() {
 
     //viewBinding
     private lateinit var binding: ActivityHomeBinding
     //ViewModel
-    private val vm by lazy { ViewModelProvider(this)[MainViewModel::class.java] }
+    private val vm by lazy { ViewModelProvider(this)[HomeViewModel::class.java] }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -4,7 +4,6 @@ import com.kevin.mvvm.BaseApplication
 import com.kevin.mvvm.db.bean.User
 import kotlinx.coroutines.Dispatchers
 
-
 object UserRepository: BaseRepository() {
 
     private val TAG = UserRepository::class.java.simpleName
