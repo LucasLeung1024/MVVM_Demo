@@ -1,12 +1,9 @@
 package com.kevin.mvvm.network
 
-
-import com.kevin.mvvm.model.BiYingResponse
-import com.kevin.mvvm.model.NewsResponse
-import com.kevin.mvvm.model.VideoResponse
-import com.kevin.mvvm.model.WallPaperResponse
+import com.kevin.mvvm.model.*
 import retrofit2.Call
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 interface ApiService {
 
@@ -33,5 +30,11 @@ interface ApiService {
      */
     @GET("/fapig/douyin/billboard?type=hot_video&size=20&key=a9c49939cae34fc7dae570b1a4824be4")
     fun video(): Call<VideoResponse>
+
+    /**
+     * 聚合新闻数据详情
+     */
+    @GET("/toutiao/content?key=99d3951ed32af2930afd9b38293a08a2")
+    fun newsDetail(@Query("uniquekey") uniquekey: String?): Call<NewsDetailResponse>
 
 }

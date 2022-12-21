@@ -1,11 +1,6 @@
 package com.kevin.mvvm.network
 
-import com.kevin.mvvm.model.BiYingResponse
-import com.kevin.mvvm.model.NewsResponse
-import com.kevin.mvvm.model.VideoResponse
-import com.kevin.mvvm.model.WallPaperResponse
-import com.kevin.mvvm_5.network.ServiceCreator3
-import com.kevin.mvvm_5.network.ServiceCreator4
+import com.kevin.mvvm.model.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -28,6 +23,7 @@ object NetworkRequest {
     suspend fun getWallPaper(): WallPaperResponse = wallPaperService.wallPaper().await()
     suspend fun getNews(): NewsResponse = newsService.news().await()
     suspend fun getVideos(): VideoResponse = videosService.video().await()
+    suspend fun getNewsDetail(uniquekey:String): NewsDetailResponse = newsService.newsDetail(uniquekey).await()
 
     private suspend fun <T> Call<T>.await(): T {
         return suspendCoroutine { continuation ->

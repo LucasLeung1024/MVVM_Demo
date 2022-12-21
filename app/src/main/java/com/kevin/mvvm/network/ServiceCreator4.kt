@@ -1,4 +1,4 @@
-package com.kevin.mvvm_5.network
+package com.kevin.mvvm.network
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

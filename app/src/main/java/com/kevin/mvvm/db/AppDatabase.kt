@@ -6,16 +6,10 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.kevin.mvvm.db.bean.Image
-import com.kevin.mvvm.db.bean.News
-import com.kevin.mvvm.db.bean.Video
-import com.kevin.mvvm.db.bean.WallPaper
-import com.kevin.mvvm.db.dao.ImageDao
-import com.kevin.mvvm.db.dao.NewsDao
-import com.kevin.mvvm.db.dao.VideoDao
-import com.kevin.mvvm.db.dao.WallPaperDao
+import com.kevin.mvvm.db.bean.*
+import com.kevin.mvvm.db.dao.*
 
-@Database(entities = [Image::class, WallPaper::class, News::class, Video::class], version = 3, exportSchema = false)
+@Database(entities = [Image::class, WallPaper::class, News::class, Video::class, User::class], version = 4, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun imageDao(): ImageDao
@@ -25,6 +19,8 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun videoDao(): VideoDao
 
     abstract fun newsDao(): NewsDao
+
+    abstract fun userDao(): UserDao
 
     companion object {
         @Volatile
@@ -81,6 +77,25 @@ abstract class AppDatabase : RoomDatabase() {
         }
 
         /**
+         * 版本升级迁移到4 新增用户表
+         */
+        val MIGRATION_3_4: Migration = object : Migration(3, 4) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                //创建用户表
+                database.execSQL(
+                    "CREATE TABLE `user` " +
+                            "(uid INTEGER NOT NULL, " +
+                            "account TEXT, " +
+                            "pwd TEXT, " +
+                            "nickname TEXT," +
+                            "introduction TEXT," +
+                            "PRIMARY KEY(`uid`))"
+                )
+            }
+        }
+
+
+        /**
          * 单例模式
          */
         fun getInstance(context: Context): AppDatabase {
@@ -88,6 +103,7 @@ abstract class AppDatabase : RoomDatabase() {
                 instance ?: Room.databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME)
                     .addMigrations(MIGRATION_1_2)
                     .addMigrations(MIGRATION_2_3)
+                    .addMigrations(MIGRATION_3_4)
                     .build().also { instance = it }
             }
         }
