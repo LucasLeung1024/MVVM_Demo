@@ -6,8 +6,9 @@ import androidx.navigation.findNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.kevin.mvvm.R
 import com.kevin.mvvm.databinding.ActivityHomeBinding
+import com.kevin.mvvm.utils.Constant
+import com.kevin.mvvm.utils.MVUtils
 import com.kevin.mvvm.viewmodel.MainViewModel
-
 
 class HomeActivity : BaseActivity() {
 
@@ -34,7 +35,7 @@ class HomeActivity : BaseActivity() {
         navView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.news_fragment -> {
-                     binding.tvTitle.text = "头条新闻"
+                    binding.tvTitle.text = "头条新闻"
                     navController.navigate(R.id.news_fragment)
                 }
                 R.id.video_fragment -> {
@@ -46,5 +47,25 @@ class HomeActivity : BaseActivity() {
             true
         }
 
+        binding.ivAvatar.setOnClickListener { v -> binding.drawerLayout.open() }
+        binding.navView.setNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.item_setting -> {}
+                R.id.item_logout -> logout()
+                else -> {}
+            }
+            true
+        }
+
     }
+
+    /**
+     * 退出登录
+     */
+    private fun logout() {
+        showMsg("退出登录")
+        MVUtils.put(Constant.IS_LOGIN, false)
+        jumpActivityFinish(LoginActivity::class.java)
+    }
+
 }

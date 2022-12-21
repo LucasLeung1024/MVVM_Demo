@@ -14,6 +14,7 @@
         <!-- Customize your theme here. -->
     </style>
 
+
     <!-- 圆角图片 -->
     <style name="roundedImageStyle">
         <item name="cornerFamily">rounded</item>
@@ -55,6 +56,12 @@
     <style name="roundedImageStyle_6">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">6dp</item>
+    </style>
+
+    <!-- 圆形图片 -->
+    <style name="circleImageStyle">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
     </style>
 
 </resources>

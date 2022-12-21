@@ -6,13 +6,17 @@ import android.view.View
 import android.widget.Toast
 import androidx.annotation.Nullable
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import com.kevin.mvvm.BaseApplication
 
 /**
  * 基础Activity
  */
 open class BaseActivity : AppCompatActivity() {
     protected var context: AppCompatActivity? = null
+
     override fun onCreate(@Nullable savedInstanceState: Bundle?) {
+        BaseApplication.getActivityManager()?.addActivity(this);
         super.onCreate(savedInstanceState)
         context = this
     }
@@ -42,6 +46,10 @@ open class BaseActivity : AppCompatActivity() {
         finish()
     }
 
+    protected open fun back(toolbar: Toolbar) {
+        toolbar.setNavigationOnClickListener { v: View? -> onBackPressed() }
+    }
+
     /**
      * 状态栏文字图标颜色
      * @param dark 深色 false 为浅色
@@ -54,4 +62,10 @@ open class BaseActivity : AppCompatActivity() {
             decor.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
         }
     }
+
+    protected open fun exitTheProgram() {
+        BaseApplication.getActivityManager()!!.finishAllActivity()
+    }
+
+
 }

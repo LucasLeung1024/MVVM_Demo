@@ -1,9 +1,7 @@
 package com.kevin.mvvm.utils;
 
 import android.os.Parcelable;
-
 import com.tencent.mmkv.MMKV;
-
 import java.util.Collections;
 import java.util.Set;
 
