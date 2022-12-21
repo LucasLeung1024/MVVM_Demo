@@ -9,7 +9,8 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.kevin.mvvm.db.bean.*
 import com.kevin.mvvm.db.dao.*
 
-@Database(entities = [Image::class, WallPaper::class, News::class, Video::class, User::class], version = 4, exportSchema = false)
+
+@Database(entities = [Image::class, WallPaper::class, News::class, Video::class, User::class], version = 5, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun imageDao(): ImageDao
@@ -94,6 +95,16 @@ abstract class AppDatabase : RoomDatabase() {
             }
         }
 
+        /**
+         * 版本升级迁移到5 在用户表中新增一个avatar字段
+         */
+        val MIGRATION_4_5: Migration = object : Migration(4, 5) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                //User表中新增avatar字段
+                database.execSQL("ALTER TABLE `user` ADD COLUMN avatar TEXT")
+            }
+        }
+
 
         /**
          * 单例模式
@@ -104,6 +115,7 @@ abstract class AppDatabase : RoomDatabase() {
                     .addMigrations(MIGRATION_1_2)
                     .addMigrations(MIGRATION_2_3)
                     .addMigrations(MIGRATION_3_4)
+                    .addMigrations(MIGRATION_4_5)
                     .build().also { instance = it }
             }
         }

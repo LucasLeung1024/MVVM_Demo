@@ -20,6 +20,7 @@ class User() : BaseObservable(){
     private var confirmPwd: String? = null
     private var nickname: String? = null
     private var introduction: String? = null
+    private var avatar: String? = null
 
     @Bindable
     fun getAccount(): String? {
@@ -71,6 +72,14 @@ class User() : BaseObservable(){
         notifyPropertyChanged(BR.introduction)
     }
 
+    @Bindable
+    fun getAvatar(): String? {
+        return introduction
+    }
+
+    fun setAvatar(avatar: String) {
+        this.avatar = avatar
+    }
 
     @Ignore
     constructor(
@@ -79,7 +88,7 @@ class User() : BaseObservable(){
         pwd: String?,
         confirmPwd: String?,
         nickname: String?,
-        introduction: String?
+        introduction: String?,
     ): this()  {
         this.uid = uid
         this.account = account
