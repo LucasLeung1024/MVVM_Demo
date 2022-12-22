@@ -18,7 +18,7 @@ class RegisterViewModel : ViewModel()
     fun register() {
         user.value?.uid = 1
         Log.d("TAG", "register: " + Gson().toJson(user.value))
-        saveUser(user.value)
+        saveUser(user.value!!)
     }
 
 

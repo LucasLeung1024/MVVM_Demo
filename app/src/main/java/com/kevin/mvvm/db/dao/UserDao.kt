@@ -7,7 +7,7 @@ import com.kevin.mvvm.db.bean.User
 @Dao
 interface UserDao {
     @Query("SELECT * FROM user")
-    suspend fun getAll(): List<User>
+    fun getAll(): List<User>
 
     @Update
     fun update(user: User)
@@ -17,7 +17,6 @@ interface UserDao {
 
     @Query("DELETE FROM user")
     fun deleteAll()
-
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(user: User)

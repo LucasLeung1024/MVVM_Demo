@@ -5,44 +5,46 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 object EasyDate {
-    private const val STANDARD_TIME = "yyyy-MM-dd HH:mm:ss"
-    private const val FULL_TIME = "yyyy-MM-dd HH:mm:ss.SSS"
-    private const val YEAR_MONTH_DAY = "yyyy-MM-dd"
-    private const val YEAR_MONTH_DAY_CN = "yyyy年MM月dd号"
-    private const val HOUR_MINUTE_SECOND = "HH:mm:ss"
-    private const val HOUR_MINUTE_SECOND_CN = "HH时mm分ss秒"
-    private const val YEAR = "yyyy"
-    private const val MONTH = "MM"
-    private const val DAY = "dd"
-    private const val HOUR = "HH"
-    private const val MINUTE = "mm"
-    private const val SECOND = "ss"
-    private const val MILLISECOND = "SSS"
-    private const val YESTERDAY = "昨天"
-    private const val TODAY = "今天"
-    private const val TOMORROW = "明天"
-    private const val SUNDAY = "星期日"
-    private const val MONDAY = "星期一"
-    private const val TUESDAY = "星期二"
-    private const val WEDNESDAY = "星期三"
-    private const val THURSDAY = "星期四"
-    private const val FRIDAY = "星期五"
-    private const val SATURDAY = "星期六"
-    private val weekDays = arrayOf(SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY)
+    const val STANDARD_TIME = "yyyy-MM-dd HH:mm:ss"
+    const val FULL_TIME = "yyyy-MM-dd HH:mm:ss.SSS"
+    const val YEAR_MONTH_DAY = "yyyy-MM-dd"
+    const val YEAR_MONTH_DAY_CN = "yyyy年MM月dd号"
+    const val HOUR_MINUTE_SECOND = "HH:mm:ss"
+    const val HOUR_MINUTE_SECOND_CN = "HH时mm分ss秒"
+    const val YEAR = "yyyy"
+    const val MONTH = "MM"
+    const val DAY = "dd"
+    const val HOUR = "HH"
+    const val MINUTE = "mm"
+    const val SECOND = "ss"
+    const val MILLISECOND = "SSS"
+    const val YESTERDAY = "昨天"
+    const val TODAY = "今天"
+    const val TOMORROW = "明天"
+    const val SUNDAY = "星期日"
+    const val MONDAY = "星期一"
+    const val TUESDAY = "星期二"
+    const val WEDNESDAY = "星期三"
+    const val THURSDAY = "星期四"
+    const val FRIDAY = "星期五"
+    const val SATURDAY = "星期六"
+    val weekDays = arrayOf(SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY)
 
     /**
      * 获取标准时间
      *
      * @return 例如 2021-07-01 10:35:53
      */
-    val dateTime: String get() = SimpleDateFormat(STANDARD_TIME, Locale.CHINESE).format(Date())
+    val dateTime: String
+        get() = SimpleDateFormat(STANDARD_TIME, Locale.CHINESE).format(Date())
 
     /**
      * 获取完整时间
      *
      * @return 例如 2021-07-01 10:37:00.748
      */
-    val fullDateTime: String get() = SimpleDateFormat(FULL_TIME, Locale.CHINESE).format(Date())
+    val fullDateTime: String
+        get() = SimpleDateFormat(FULL_TIME, Locale.CHINESE).format(Date())
 
     /**
      * 获取年月日(今天)
@@ -65,86 +67,100 @@ object EasyDate {
      * @param delimiter 分隔符
      * @return 例如 2021年07月01号
      */
-    fun getTheYearMonthAndDayDelimiter(delimiter: CharSequence): String =
-        SimpleDateFormat(YEAR + delimiter + MONTH + delimiter + DAY, Locale.CHINESE).format(Date())
+    fun getTheYearMonthAndDayDelimiter(delimiter: CharSequence): String {
+        return SimpleDateFormat(YEAR + delimiter + MONTH + delimiter + DAY, Locale.CHINESE).format(
+            Date())
+    }
 
     /**
      * 获取时分秒
      *
      * @return 例如 10:38:25
      */
-    val hoursMinutesAndSeconds: String get() = SimpleDateFormat(HOUR_MINUTE_SECOND, Locale.CHINESE).format(Date())
+    val hoursMinutesAndSeconds: String
+        get() = SimpleDateFormat(HOUR_MINUTE_SECOND, Locale.CHINESE).format(Date())
 
     /**
      * 获取时分秒
      *
      * @return 例如 10时38分50秒
      */
-    val hoursMinutesAndSecondsCn: String get() = SimpleDateFormat(HOUR_MINUTE_SECOND_CN, Locale.CHINESE).format(Date())
+    val hoursMinutesAndSecondsCn: String
+        get() = SimpleDateFormat(HOUR_MINUTE_SECOND_CN, Locale.CHINESE).format(Date())
 
     /**
      * 获取时分秒
      * @param delimiter 分隔符
      * @return 例如 2021/07/01
      */
-    fun getHoursMinutesAndSecondsDelimiter(delimiter: CharSequence): String =
-        SimpleDateFormat(HOUR + delimiter + MINUTE + delimiter + SECOND, Locale.CHINESE).format(Date())
+    fun getHoursMinutesAndSecondsDelimiter(delimiter: CharSequence): String {
+        return SimpleDateFormat(HOUR + delimiter + MINUTE + delimiter + SECOND,
+            Locale.CHINESE).format(Date())
+    }
 
     /**
      * 获取年
      *
      * @return 例如 2021
      */
-    val year: String get() = SimpleDateFormat(YEAR, Locale.CHINESE).format(Date())
+    val year: String
+        get() = SimpleDateFormat(YEAR, Locale.CHINESE).format(Date())
 
     /**
      * 获取月
      *
      * @return 例如 07
      */
-    val month: String get() = SimpleDateFormat(MONTH, Locale.CHINESE).format(Date())
+    val month: String
+        get() = SimpleDateFormat(MONTH, Locale.CHINESE).format(Date())
 
     /**
      * 获取天
      *
      * @return 例如 01
      */
-    val day: String get() = SimpleDateFormat(DAY, Locale.CHINESE).format(Date())
+    val day: String
+        get() = SimpleDateFormat(DAY, Locale.CHINESE).format(Date())
 
     /**
      * 获取小时
      *
      * @return 例如 10
      */
-    val hour: String get() = SimpleDateFormat(HOUR, Locale.CHINESE).format(Date())
+    val hour: String
+        get() = SimpleDateFormat(HOUR, Locale.CHINESE).format(Date())
 
     /**
      * 获取分钟
      *
      * @return 例如 40
      */
-    val minute: String get() = SimpleDateFormat(MINUTE, Locale.CHINESE).format(Date())
+    val minute: String
+        get() = SimpleDateFormat(MINUTE, Locale.CHINESE).format(Date())
 
     /**
      * 获取秒
      *
      * @return 例如 58
      */
-    val second: String get() = SimpleDateFormat(SECOND, Locale.CHINESE).format(Date())
+    val second: String
+        get() = SimpleDateFormat(SECOND, Locale.CHINESE).format(Date())
 
     /**
      * 获取毫秒
      *
      * @return 例如 666
      */
-    val milliSecond: String get() = SimpleDateFormat(MILLISECOND, Locale.CHINESE).format(Date())
+    val milliSecond: String
+        get() = SimpleDateFormat(MILLISECOND, Locale.CHINESE).format(Date())
 
     /**
      * 获取时间戳
      *
      * @return 例如 1625107306051
      */
-    val timestamp: Long get() = System.currentTimeMillis()
+    val timestamp: Long
+        get() = System.currentTimeMillis()
 
     /**
      * 将时间转换为时间戳
@@ -163,13 +179,6 @@ object EasyDate {
         return Objects.requireNonNull(date)!!.time
     }
 
-    /**
-     * 将时间戳转换为时间
-     *
-     * @param timeMillis 例如 1625107637084
-     * @return 例如 2021-07-01 10:47:17
-     */
-    fun stampToDate(timeMillis: Long): String = SimpleDateFormat(STANDARD_TIME, Locale.CHINESE).format(Date(timeMillis))
 
     /**
      * 获取第二天凌晨0点时间戳
@@ -185,6 +194,16 @@ object EasyDate {
         cal[Calendar.MINUTE] = 0
         cal[Calendar.MILLISECOND] = 0
         return cal.timeInMillis
+    }
+
+    /**
+     * 将时间戳转换为时间
+     *
+     * @param timeMillis 例如 1625107637084
+     * @return 例如 2021-07-01 10:47:17
+     */
+    fun stampToDate(timeMillis: Long): String {
+        return SimpleDateFormat(STANDARD_TIME, Locale.CHINESE).format(Date(timeMillis))
     }
 
     /**
@@ -280,9 +299,7 @@ object EasyDate {
             getWeek(dateTime)
         }
         return dayInfo
-    }
-
-    //把日期设置为当月第一天
+    }//把日期设置为当月第一天
     //日期回滚一天，也就是最后一天
     /**
      * 获取本月天数
@@ -317,3 +334,4 @@ object EasyDate {
         return calendar[Calendar.DATE]
     }
 }
+

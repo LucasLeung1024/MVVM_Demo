@@ -13,7 +13,6 @@ import com.google.android.material.imageview.ShapeableImageView
 import com.kevin.mvvm.BaseApplication
 import com.kevin.mvvm.R
 
-
 /**
  * 自定义View
  * @description CustomImageVIew

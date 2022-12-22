@@ -74,7 +74,7 @@ class User() : BaseObservable(){
 
     @Bindable
     fun getAvatar(): String? {
-        return introduction
+        return avatar
     }
 
     fun setAvatar(avatar: String) {
@@ -89,6 +89,7 @@ class User() : BaseObservable(){
         confirmPwd: String?,
         nickname: String?,
         introduction: String?,
+        avatar: String
     ): this()  {
         this.uid = uid
         this.account = account
@@ -96,6 +97,7 @@ class User() : BaseObservable(){
         this.confirmPwd = confirmPwd
         this.nickname = nickname
         this.introduction = introduction
+        this.avatar = avatar
     }
 }
 

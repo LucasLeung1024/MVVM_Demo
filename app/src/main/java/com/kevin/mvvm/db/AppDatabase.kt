@@ -116,6 +116,7 @@ abstract class AppDatabase : RoomDatabase() {
                     .addMigrations(MIGRATION_2_3)
                     .addMigrations(MIGRATION_3_4)
                     .addMigrations(MIGRATION_4_5)
+                    .allowMainThreadQueries()
                     .build().also { instance = it }
             }
         }

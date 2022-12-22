@@ -33,7 +33,7 @@ class LoginActivity : BaseActivity() {
         setContentView(binding.root)
 
         //设置数据，直接显示在xml上
-        vm.user.value =  User(1, "", "", "", "", "")
+        vm.user.value =  User(1, "", "", "", "", "","")
 
         //获取观察对象
         vm.user.observe(this) {
@@ -59,7 +59,6 @@ class LoginActivity : BaseActivity() {
 
 
     private fun checkUser() {
-        vm.getLocalUser()
         vm.getLocalUser().observe(this) { localUser ->
             if (!vm.user.value?.getAccount().equals(localUser.getOrNull()?.getAccount()) ||
                 !vm.user.value?.getPwd().equals(localUser.getOrNull()?.getPwd())

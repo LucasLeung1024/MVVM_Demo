@@ -20,7 +20,7 @@ class RegisterActivity : BaseActivity() {
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        vm.user.value = User(1, "", "", "", "", "")
+        vm.user.value = User(1, "", "", "", "", "","")
         //获取观察对象
         vm.user.observe(this) {
             binding.register = vm
