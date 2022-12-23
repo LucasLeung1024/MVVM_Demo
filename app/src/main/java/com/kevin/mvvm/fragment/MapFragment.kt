@@ -7,17 +7,34 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.amap.api.maps.AMap
+import com.amap.api.maps.AMapException
 import com.amap.api.maps.MapsInitializer
 import com.amap.api.maps.model.MyLocationStyle
+import com.amap.api.services.core.LatLonPoint
+import com.amap.api.services.geocoder.GeocodeResult
+import com.amap.api.services.geocoder.GeocodeSearch
+import com.amap.api.services.geocoder.RegeocodeQuery
+import com.amap.api.services.geocoder.RegeocodeResult
+import com.amap.api.services.weather.LocalWeatherForecastResult
+import com.amap.api.services.weather.LocalWeatherLiveResult
+import com.amap.api.services.weather.WeatherSearch
 import com.kevin.mvvm.databinding.MapFragmentBinding
 
 
-class MapFragment : BaseFragment(), AMap.OnMyLocationChangeListener {
+class MapFragment : BaseFragment(), AMap.OnMyLocationChangeListener,
+    GeocodeSearch.OnGeocodeSearchListener,
+    WeatherSearch.OnWeatherSearchListener {
 
     private val TAG = MapFragment::class.java.simpleName
 
     private var _binding: MapFragmentBinding? = null
     private val binding get() = _binding!!
+
+    //解析成功标识码
+    private val PARSE_SUCCESS_CODE = 1000
+    private var geocoderSearch: GeocodeSearch? = null
+    private var district: String? = null // 区/县
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,6 +52,8 @@ class MapFragment : BaseFragment(), AMap.OnMyLocationChangeListener {
         binding.mapView.onCreate(savedInstanceState)
 
         initMap()
+
+        initSearch()
     }
 
     /**
@@ -55,12 +74,33 @@ class MapFragment : BaseFragment(), AMap.OnMyLocationChangeListener {
         aMap.setOnMyLocationChangeListener(this)
     }
 
+    /**
+     * 初始化搜索
+     */
+    private fun initSearch() {
+        try {
+            geocoderSearch = GeocodeSearch(requireActivity())
+            geocoderSearch!!.setOnGeocodeSearchListener(this)
+        } catch (e: AMapException) {
+            e.printStackTrace()
+        }
+    }
+
+
     override fun onMyLocationChange(location: Location?) {
         // 定位回调监听
         if (location != null) {
             Log.e(TAG,
-                "onMyLocationChange 定位成功， lat: " + location.getLatitude()
-                    .toString() + " lon: " + location.getLongitude())
+                "onMyLocationChange 定位成功， lat: " + location.latitude
+                    .toString() + " lon: " + location.longitude)
+
+            //创建一个经纬度点，参数一是纬度，参数二是经度
+            val latLonPoint = LatLonPoint(location.latitude, location.longitude)
+            // 第一个参数表示一个Latlng，第二参数表示范围多少米，第三个参数表示是火系坐标系还是GPS原生坐标系
+            val query = RegeocodeQuery(latLonPoint, 20F, GeocodeSearch.AMAP)
+            //通过经纬度获取地址信息
+            geocoderSearch!!.getFromLocationAsyn(query)
+
         } else {
             Log.e(TAG, "定位失败")
         }
@@ -85,6 +125,35 @@ class MapFragment : BaseFragment(), AMap.OnMyLocationChangeListener {
     override fun onDestroy() {
         super.onDestroy()
         binding.mapView.onDestroy()
+    }
+
+    /**
+     * 坐标转地址
+     */
+    override fun onRegeocodeSearched(regeocodeResult: RegeocodeResult?, rCode: Int) {
+        //解析result获取地址描述信息
+        if (rCode === PARSE_SUCCESS_CODE) {
+            val regeocodeAddress = regeocodeResult!!.regeocodeAddress
+            //显示解析后的地址
+            Log.e(TAG, "地址: " + regeocodeAddress.formatAddress)
+            district = regeocodeAddress.district
+            Log.e(TAG, "区: $district")
+        } else {
+            showMsg("获取地址失败")
+        }
+    }
+
+    /**
+     * 地址转坐标
+     */
+    override fun onGeocodeSearched(geocodeResult: GeocodeResult?, rCode: Int) {}
+
+    override fun onWeatherLiveSearched(p0: LocalWeatherLiveResult?, p1: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onWeatherForecastSearched(p0: LocalWeatherForecastResult?, p1: Int) {
+        TODO("Not yet implemented")
     }
 
 
