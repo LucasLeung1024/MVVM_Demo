@@ -1,13 +1,17 @@
 package com.kevin.mvvm.fragment
 
+import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.amap.api.maps.AMap
 import com.amap.api.maps.AMapException
+import com.amap.api.maps.AMapOptions
 import com.amap.api.maps.MapsInitializer
 import com.amap.api.maps.model.MyLocationStyle
 import com.amap.api.services.core.LatLonPoint
@@ -16,7 +20,11 @@ import com.amap.api.services.geocoder.GeocodeSearch
 import com.amap.api.services.geocoder.RegeocodeQuery
 import com.amap.api.services.geocoder.RegeocodeResult
 import com.amap.api.services.weather.*
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.gson.Gson
+import com.kevin.mvvm.R
+import com.kevin.mvvm.adapter.ForecastAdapter
+import com.kevin.mvvm.databinding.DialogWeatherBinding
 import com.kevin.mvvm.databinding.MapFragmentBinding
 
 
@@ -37,6 +45,10 @@ class MapFragment : BaseFragment(), AMap.OnMyLocationChangeListener,
     private var liveResult: LocalWeatherLive? = null
     private var forecastResult: LocalWeatherForecast? = null
 
+    //天气预报列表
+    private val weatherForecast: MutableList<LocalDayWeatherForecast>? = null
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -51,9 +63,10 @@ class MapFragment : BaseFragment(), AMap.OnMyLocationChangeListener,
         MapsInitializer.updatePrivacyShow(requireActivity(), true, true)
         MapsInitializer.updatePrivacyAgree(requireActivity(), true)
         binding.mapView.onCreate(savedInstanceState)
-
+        //点击按钮显示天气弹窗
+        binding.fabWeather.setOnClickListener {showWeatherDialog()}
+        
         initMap()
-
         initSearch()
     }
 
@@ -65,12 +78,18 @@ class MapFragment : BaseFragment(), AMap.OnMyLocationChangeListener,
         val aMap = binding.mapView.map
         // 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
         aMap.isMyLocationEnabled = true
-        val style =
-            MyLocationStyle() //初始化定位蓝点样式类myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);//连续定位、且将视角移动到地图中心点，定位点依照设备方向旋转，并且会跟随设备移动。（1秒1次定位）如果不设置myLocationType，默认也会执行此种模式。
-        style.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE) //定位一次，且将视角移动到地图中心点。
-        aMap.myLocationStyle = style //设置定位蓝点的Style
-        aMap.uiSettings.isMyLocationButtonEnabled = true //设置默认定位按钮是否显示，非必需设置。
-        aMap.isMyLocationEnabled = true // 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
+        //初始化定位蓝点样式类myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);//连续定位、且将视角移动到地图中心点，定位点依照设备方向旋转，并且会跟随设备移动。（1秒1次定位）如果不设置myLocationType，默认也会执行此种模式。
+        val style = MyLocationStyle()
+        //定位一次，且将视角移动到地图中心点。
+        style.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE)
+        //设置定位蓝点的Style
+        aMap.myLocationStyle = style
+        //修改放大缩小按钮的位置
+        aMap.uiSettings.zoomPosition = AMapOptions.ZOOM_POSITION_RIGHT_CENTER
+        //设置默认定位按钮是否显示，非必需设置。
+        aMap.uiSettings.isMyLocationButtonEnabled = true
+        //设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
+        aMap.isMyLocationEnabled = true
         //设置SDK 自带定位消息监听
         aMap.setOnMyLocationChangeListener(this)
     }
@@ -186,9 +205,35 @@ class MapFragment : BaseFragment(), AMap.OnMyLocationChangeListener,
         forecastResult = p0!!.forecastResult
         if (forecastResult != null) {
             Log.e(TAG, "onWeatherForecastSearched: " + Gson().toJson(forecastResult))
+            binding.fabWeather.show()
         } else {
             showMsg("天气预报数据为空")
         }
+    }
+
+    /**
+     * 显示天气弹窗
+     */
+    private fun showWeatherDialog() {
+        //隐藏浮动按钮
+        binding.fabWeather.hide()
+        val dialog = BottomSheetDialog(requireActivity(), R.style.BottomSheetDialogStyle_Light)
+        val weatherBinding: DialogWeatherBinding =
+            DataBindingUtil.inflate(LayoutInflater.from(requireActivity()),
+                R.layout.dialog_weather,
+                null,
+                false)
+        //设置数据源
+        //weatherBinding.setLiveWeather(LiveWeather(district!!, liveResult!!))
+        //配置天气预报列表
+        val forecastAdapter = ForecastAdapter(weatherForecast!!)
+        weatherBinding.rvForecast.layoutManager = LinearLayoutManager(requireActivity())
+        weatherBinding.rvForecast.adapter = forecastAdapter
+        dialog.setContentView(weatherBinding.root)
+        dialog.window!!.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet).setBackgroundColor(Color.TRANSPARENT)
+        //弹窗关闭时显示浮动按钮
+        dialog.setOnDismissListener { binding.fabWeather.show() }
+        dialog.show()
     }
 
 
