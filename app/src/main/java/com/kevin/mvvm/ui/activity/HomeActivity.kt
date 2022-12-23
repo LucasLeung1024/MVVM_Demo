@@ -76,13 +76,9 @@ class HomeActivity : BaseActivity() {
         val navController = findNavController(R.id.nav_host_fragment)
         navView.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.news_fragment -> {
-                    binding.tvTitle.text = "头条新闻"
-                    navController.navigate(R.id.news_fragment)
-                }
-                R.id.video_fragment -> {
-                    binding.tvTitle.text = "热门视频"
-                    navController.navigate(R.id.video_fragment)
+                R.id.info_fragment -> {
+                    binding.tvTitle.text = "热门资讯"
+                    navController.navigate(R.id.info_fragment)
                 }
                 R.id.map_fragment -> {
                     binding.tvTitle.text = "地图天气"
