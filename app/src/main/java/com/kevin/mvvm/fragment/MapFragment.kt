@@ -15,9 +15,8 @@ import com.amap.api.services.geocoder.GeocodeResult
 import com.amap.api.services.geocoder.GeocodeSearch
 import com.amap.api.services.geocoder.RegeocodeQuery
 import com.amap.api.services.geocoder.RegeocodeResult
-import com.amap.api.services.weather.LocalWeatherForecastResult
-import com.amap.api.services.weather.LocalWeatherLiveResult
-import com.amap.api.services.weather.WeatherSearch
+import com.amap.api.services.weather.*
+import com.google.gson.Gson
 import com.kevin.mvvm.databinding.MapFragmentBinding
 
 
@@ -35,6 +34,8 @@ class MapFragment : BaseFragment(), AMap.OnMyLocationChangeListener,
     private var geocoderSearch: GeocodeSearch? = null
     private var district: String? = null // 区/县
 
+    private var liveResult: LocalWeatherLive? = null
+    private var forecastResult: LocalWeatherForecast? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -86,6 +87,22 @@ class MapFragment : BaseFragment(), AMap.OnMyLocationChangeListener,
         }
     }
 
+    /**
+     * 搜索天气
+     *
+     * @param type WEATHER_TYPE_LIVE 实时天气   WEATHER_TYPE_FORECAST  预报天气
+     */
+    private fun searchWeather(type: Int) {
+        val weatherSearchQuery = WeatherSearchQuery(district, type)
+        try {
+            val weatherSearch = WeatherSearch(requireActivity())
+            weatherSearch.setOnWeatherSearchListener(this)
+            weatherSearch.query = weatherSearchQuery
+            weatherSearch.searchWeatherAsyn() //异步搜索
+        } catch (e: com.amap.api.services.core.AMapException) {
+            e.printStackTrace()
+        }
+    }
 
     override fun onMyLocationChange(location: Location?) {
         // 定位回调监听
@@ -138,6 +155,10 @@ class MapFragment : BaseFragment(), AMap.OnMyLocationChangeListener,
             Log.e(TAG, "地址: " + regeocodeAddress.formatAddress)
             district = regeocodeAddress.district
             Log.e(TAG, "区: $district")
+
+            //搜索天气  实时天气和预报天气
+            searchWeather(WeatherSearchQuery.WEATHER_TYPE_LIVE)
+            searchWeather(WeatherSearchQuery.WEATHER_TYPE_FORECAST)
         } else {
             showMsg("获取地址失败")
         }
@@ -148,12 +169,26 @@ class MapFragment : BaseFragment(), AMap.OnMyLocationChangeListener,
      */
     override fun onGeocodeSearched(geocodeResult: GeocodeResult?, rCode: Int) {}
 
+    /**
+     * 实时天气返回
+     */
     override fun onWeatherLiveSearched(p0: LocalWeatherLiveResult?, p1: Int) {
-        TODO("Not yet implemented")
+        liveResult = p0!!.liveResult
+        if (liveResult == null) {
+            showMsg("实时天气数据为空")
+        }
     }
 
+    /**
+     * 天气预报返回
+     */
     override fun onWeatherForecastSearched(p0: LocalWeatherForecastResult?, p1: Int) {
-        TODO("Not yet implemented")
+        forecastResult = p0!!.forecastResult
+        if (forecastResult != null) {
+            Log.e(TAG, "onWeatherForecastSearched: " + Gson().toJson(forecastResult))
+        } else {
+            showMsg("天气预报数据为空")
+        }
     }
 
 
