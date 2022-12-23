@@ -29,7 +29,6 @@ import com.kevin.mvvm.databinding.NavHeaderBinding
 import com.kevin.mvvm.db.bean.User
 import com.kevin.mvvm.utils.*
 import com.kevin.mvvm.utils.EasyDate.milliSecond
-import com.kevin.mvvm.utils.PermissionUtils.REQUEST_MANAGE_EXTERNAL_STORAGE_CODE
 import com.kevin.mvvm.view.dialog.AlertDialog
 import com.kevin.mvvm.viewmodel.HomeViewModel
 import java.io.File
@@ -64,6 +63,7 @@ class HomeActivity : BaseActivity() {
         //显示加载弹窗
         showLoading()
         initView()
+        requestLocation()
     }
 
     /**
@@ -405,5 +405,19 @@ class HomeActivity : BaseActivity() {
             else -> {}
         }
     }
+
+    /**
+     * 请求定位权限
+     */
+    private fun requestLocation() {
+        if (isAndroid6()) {
+            if (!hasPermission(PermissionUtils.LOCATION)) {
+                requestPermission(PermissionUtils.LOCATION)
+            }
+        } else {
+            showMsg("您无需动态请求权限")
+        }
+    }
+
 
 }
