@@ -7,7 +7,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <com.kevin.mvvm.view.CustomImageView
+        <com.kevin.mvvm.ui.view.CustomImageView
             android:id="@+id/cusImageView"
             android:layout_width="match_parent"
             android:layout_height="300dp"

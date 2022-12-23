@@ -1,4 +1,4 @@
-package com.kevin.mvvm.activity
+package com.kevin.mvvm.ui.activity
 
 import android.content.Intent
 import android.net.Uri
@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.kevin.mvvm.BaseApplication
 import com.kevin.mvvm.utils.PermissionUtils
-import com.kevin.mvvm.view.dialog.LoadingDialog
+import com.kevin.mvvm.ui.view.dialog.LoadingDialog
 
 
 /**

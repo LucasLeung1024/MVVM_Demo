@@ -1,4 +1,4 @@
-package com.kevin.mvvm.activity
+package com.kevin.mvvm.ui.activity
 
 import android.content.ContentValues
 import android.content.DialogInterface
@@ -29,7 +29,7 @@ import com.kevin.mvvm.databinding.NavHeaderBinding
 import com.kevin.mvvm.db.bean.User
 import com.kevin.mvvm.utils.*
 import com.kevin.mvvm.utils.EasyDate.milliSecond
-import com.kevin.mvvm.view.dialog.AlertDialog
+import com.kevin.mvvm.ui.view.dialog.AlertDialog
 import com.kevin.mvvm.viewmodel.HomeViewModel
 import java.io.File
 

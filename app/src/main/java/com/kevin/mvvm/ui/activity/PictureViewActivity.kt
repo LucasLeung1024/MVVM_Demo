@@ -1,9 +1,9 @@
-package com.kevin.mvvm.activity
+package com.kevin.mvvm.ui.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.kevin.mvvm.adapter.ImageAdapter
+import com.kevin.mvvm.ui.adapter.ImageAdapter
 import com.kevin.mvvm.databinding.ActivityPictureViewBinding
 import com.kevin.mvvm.viewmodel.PictureViewModel
 

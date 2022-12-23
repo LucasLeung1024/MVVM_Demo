@@ -1,4 +1,4 @@
-package com.kevin.mvvm.view.dialog;
+package com.kevin.mvvm.ui.view.dialog;
 
 import android.content.Context;
 import android.util.SparseArray;

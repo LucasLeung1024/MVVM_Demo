@@ -23,7 +23,7 @@
             android:textColor="@color/black"
             android:textSize="14sp" />
 
-        <com.kevin.mvvm.view.CustomImageView
+        <com.kevin.mvvm.ui.view.CustomImageView
             android:id="@+id/image"
             android:layout_width="140dp"
             android:layout_height="80dp"

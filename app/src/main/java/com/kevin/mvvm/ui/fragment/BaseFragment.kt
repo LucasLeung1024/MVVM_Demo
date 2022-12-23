@@ -1,4 +1,4 @@
-package com.kevin.mvvm.fragment
+package com.kevin.mvvm.ui.fragment
 
 import android.content.Context
 import android.os.Bundle

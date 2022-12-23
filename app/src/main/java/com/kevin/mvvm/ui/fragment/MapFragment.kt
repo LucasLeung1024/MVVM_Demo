@@ -1,4 +1,4 @@
-package com.kevin.mvvm.fragment
+package com.kevin.mvvm.ui.fragment
 
 import android.graphics.Color
 import android.location.Location
@@ -23,7 +23,7 @@ import com.amap.api.services.weather.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.gson.Gson
 import com.kevin.mvvm.R
-import com.kevin.mvvm.adapter.ForecastAdapter
+import com.kevin.mvvm.ui.adapter.ForecastAdapter
 import com.kevin.mvvm.databinding.DialogWeatherBinding
 import com.kevin.mvvm.databinding.MapFragmentBinding
 
@@ -65,7 +65,7 @@ class MapFragment : BaseFragment(), AMap.OnMyLocationChangeListener,
         binding.mapView.onCreate(savedInstanceState)
         //点击按钮显示天气弹窗
         binding.fabWeather.setOnClickListener {showWeatherDialog()}
-        
+
         initMap()
         initSearch()
     }

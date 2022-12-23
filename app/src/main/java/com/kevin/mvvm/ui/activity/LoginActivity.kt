@@ -1,4 +1,4 @@
-package com.kevin.mvvm.activity
+package com.kevin.mvvm.ui.activity
 
 import android.os.Bundle
 import android.util.Log

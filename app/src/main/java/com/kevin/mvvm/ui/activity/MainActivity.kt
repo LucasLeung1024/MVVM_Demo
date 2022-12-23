@@ -1,11 +1,11 @@
-package com.kevin.mvvm.activity
+package com.kevin.mvvm.ui.activity
 
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.appbar.AppBarLayout
-import com.kevin.mvvm.adapter.WallPaperAdapter
+import com.kevin.mvvm.ui.adapter.WallPaperAdapter
 import com.kevin.mvvm.databinding.ActivityMainBinding
 import com.kevin.mvvm.viewmodel.MainViewModel
 

@@ -1,4 +1,4 @@
-package com.kevin.mvvm.fragment
+package com.kevin.mvvm.ui.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.kevin.mvvm.adapter.NewsAdapter
+import com.kevin.mvvm.ui.adapter.NewsAdapter
 import com.kevin.mvvm.databinding.FragmentNewsBinding
 import com.kevin.mvvm.viewmodel.NewsViewModel
 

@@ -1,9 +1,9 @@
-package com.kevin.mvvm.adapter
+package com.kevin.mvvm.ui.adapter
 
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.widget.Toast
-import com.kevin.mvvm.activity.WebActivity
+import com.kevin.mvvm.ui.activity.WebActivity
 import com.kevin.mvvm.databinding.ItemNewsBinding
 import com.kevin.mvvm.model.NewsResponse
 

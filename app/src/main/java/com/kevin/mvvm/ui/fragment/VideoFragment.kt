@@ -1,4 +1,4 @@
-package com.kevin.mvvm.fragment
+package com.kevin.mvvm.ui.fragment
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.kevin.mvvm.adapter.VideoAdapter
+import com.kevin.mvvm.ui.adapter.VideoAdapter
 import com.kevin.mvvm.databinding.FragmentVideoBinding
 import com.kevin.mvvm.viewmodel.VideoViewModel
 

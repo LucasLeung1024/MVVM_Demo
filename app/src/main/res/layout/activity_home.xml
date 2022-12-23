@@ -21,7 +21,7 @@
                 android:background="@color/purple_500">
 
                 <!--圆形图片-->
-                <com.kevin.mvvm.view.CustomImageView
+                <com.kevin.mvvm.ui.view.CustomImageView
                     android:id="@+id/iv_avatar"
                     android:layout_width="36dp"
                     android:layout_height="36dp"

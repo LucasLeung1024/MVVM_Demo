@@ -1,4 +1,4 @@
-package com.kevin.mvvm.view
+package com.kevin.mvvm.ui.view
 
 import android.content.Context
 import android.util.AttributeSet

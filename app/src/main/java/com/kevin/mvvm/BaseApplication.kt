@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import android.util.Log
-import com.kevin.mvvm.activity.ActivityManager
+import com.kevin.mvvm.ui.activity.ActivityManager
 import com.kevin.mvvm.db.AppDatabase
 import com.kevin.mvvm.utils.MVUtils
 import com.tencent.mmkv.MMKV

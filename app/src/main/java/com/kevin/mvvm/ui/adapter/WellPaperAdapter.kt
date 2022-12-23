@@ -1,8 +1,8 @@
-package com.kevin.mvvm.adapter
+package com.kevin.mvvm.ui.adapter
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import com.kevin.mvvm.activity.PictureViewActivity
+import com.kevin.mvvm.ui.activity.PictureViewActivity
 import com.kevin.mvvm.databinding.ItemWallPaperBinding
 import com.kevin.mvvm.model.WallPaperResponse.ResBean.VerticalBean
 

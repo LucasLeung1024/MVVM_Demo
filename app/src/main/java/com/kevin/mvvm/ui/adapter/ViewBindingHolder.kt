@@ -1,4 +1,4 @@
-package com.kevin.mvvm.adapter
+package com.kevin.mvvm.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.View
