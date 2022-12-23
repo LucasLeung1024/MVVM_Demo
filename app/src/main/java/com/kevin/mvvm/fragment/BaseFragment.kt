@@ -10,7 +10,7 @@ import androidx.annotation.Nullable
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 
-class BaseFragment : Fragment() {
+open class BaseFragment : Fragment() {
     protected var context: AppCompatActivity? = null
     override fun onCreateView(
         inflater: LayoutInflater,

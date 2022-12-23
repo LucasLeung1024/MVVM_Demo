@@ -11,11 +11,7 @@ import com.kevin.mvvm.adapter.VideoAdapter
 import com.kevin.mvvm.databinding.FragmentVideoBinding
 import com.kevin.mvvm.viewmodel.VideoViewModel
 
-class VideoFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = NewsFragment()
-    }
+class VideoFragment : BaseFragment() {
 
     private lateinit var viewModel: VideoViewModel
 

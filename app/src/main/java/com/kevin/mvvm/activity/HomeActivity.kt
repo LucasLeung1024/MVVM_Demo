@@ -84,6 +84,10 @@ class HomeActivity : BaseActivity() {
                     binding.tvTitle.text = "热门视频"
                     navController.navigate(R.id.video_fragment)
                 }
+                R.id.map_fragment -> {
+                    binding.tvTitle.text = "地图天气"
+                    navController.navigate(R.id.map_fragment)
+                }
                 else -> {}
             }
             true

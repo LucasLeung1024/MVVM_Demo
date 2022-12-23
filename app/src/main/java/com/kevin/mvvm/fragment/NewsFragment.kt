@@ -11,17 +11,12 @@ import com.kevin.mvvm.adapter.NewsAdapter
 import com.kevin.mvvm.databinding.FragmentNewsBinding
 import com.kevin.mvvm.viewmodel.NewsViewModel
 
-class NewsFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = NewsFragment()
-    }
+class NewsFragment : BaseFragment() {
 
     private lateinit var viewModel: NewsViewModel
 
     private var _binding: FragmentNewsBinding? = null
     private val binding get() = _binding!!
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
