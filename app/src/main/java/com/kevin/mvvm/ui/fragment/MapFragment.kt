@@ -13,7 +13,11 @@ import androidx.drawerlayout.widget.DrawerLayout.DrawerListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.amap.api.maps.AMap
 import com.amap.api.maps.AMapOptions
+import com.amap.api.maps.CameraUpdateFactory
 import com.amap.api.maps.MapsInitializer
+import com.amap.api.maps.model.CameraPosition
+import com.amap.api.maps.model.LatLng
+import com.amap.api.maps.model.MarkerOptions
 import com.amap.api.maps.model.MyLocationStyle
 import com.amap.api.services.core.AMapException
 import com.amap.api.services.core.LatLonPoint
@@ -21,10 +25,7 @@ import com.amap.api.services.district.DistrictItem
 import com.amap.api.services.district.DistrictResult
 import com.amap.api.services.district.DistrictSearch
 import com.amap.api.services.district.DistrictSearchQuery
-import com.amap.api.services.geocoder.GeocodeResult
-import com.amap.api.services.geocoder.GeocodeSearch
-import com.amap.api.services.geocoder.RegeocodeQuery
-import com.amap.api.services.geocoder.RegeocodeResult
+import com.amap.api.services.geocoder.*
 import com.amap.api.services.weather.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.gson.Gson
@@ -47,6 +48,10 @@ class MapFragment : BaseFragment(), AMap.OnMyLocationChangeListener,
 
     //解析成功标识码
     private val PARSE_SUCCESS_CODE = 1000
+
+    //地图对象
+    private var aMap: AMap? = null
+
     private var geocoderSearch: GeocodeSearch? = null
     private var district: String? = null // 区/县
 
@@ -125,23 +130,23 @@ class MapFragment : BaseFragment(), AMap.OnMyLocationChangeListener,
      */
     private fun initMap() {
         //初始化地图控制器对象
-        val aMap = binding.mapView.map
+        aMap = binding.mapView.map
         // 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
-        aMap.isMyLocationEnabled = true
+        aMap!!.isMyLocationEnabled = true
         //初始化定位蓝点样式类myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);//连续定位、且将视角移动到地图中心点，定位点依照设备方向旋转，并且会跟随设备移动。（1秒1次定位）如果不设置myLocationType，默认也会执行此种模式。
         val style = MyLocationStyle()
         //定位一次，且将视角移动到地图中心点。
         style.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE)
         //设置定位蓝点的Style
-        aMap.myLocationStyle = style
+        aMap!!.myLocationStyle = style
         //修改放大缩小按钮的位置
-        aMap.uiSettings.zoomPosition = AMapOptions.ZOOM_POSITION_RIGHT_CENTER
+        aMap!!.uiSettings.zoomPosition = AMapOptions.ZOOM_POSITION_RIGHT_CENTER
         //设置默认定位按钮是否显示，非必需设置。
-        aMap.uiSettings.isMyLocationButtonEnabled = true
+        aMap!!.uiSettings.isMyLocationButtonEnabled = true
         //设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
-        aMap.isMyLocationEnabled = true
+        aMap!!.isMyLocationEnabled = true
         //设置SDK 自带定位消息监听
-        aMap.setOnMyLocationChangeListener(this)
+        aMap!!.setOnMyLocationChangeListener(this)
     }
 
     /**
@@ -241,7 +246,23 @@ class MapFragment : BaseFragment(), AMap.OnMyLocationChangeListener,
     /**
      * 地址转坐标
      */
-    override fun onGeocodeSearched(geocodeResult: GeocodeResult?, rCode: Int) {}
+    override fun onGeocodeSearched(geocodeResult: GeocodeResult?, rCode: Int) {
+        //拿到返回的坐标，然后去地图上定位，改变地图中心
+        if (rCode == PARSE_SUCCESS_CODE) {
+            Log.e(TAG, "onGeocodeSearched: 地址转坐标成功")
+            val geocodeAddressList = geocodeResult!!.geocodeAddressList
+            if (geocodeAddressList != null && geocodeAddressList.size > 0) {
+                val latLonPoint = geocodeAddressList[0].latLonPoint
+                Log.e(TAG,
+                    "onGeocodeSearched: 坐标：" + latLonPoint.longitude + "，" + latLonPoint.latitude
+                )
+                //切换地图中心
+                switchMapCenter(geocodeResult, latLonPoint)
+            }
+        } else {
+            showMsg("获取坐标失败")
+        }
+    }
 
     /**
      * 实时天气返回
@@ -328,16 +349,61 @@ class MapFragment : BaseFragment(), AMap.OnMyLocationChangeListener,
                                 binding.ivBack.visibility = View.GONE
                             }
                         }
-
                         //搜索此区域的下级行政区
                         districtSearch(districtArray[index])
                     }
                     binding.rvCity.adapter = cityAdapter
+                } else{
+                    //size=0表示什么，表示它没有下级行政区了，也就是说已经到了镇这个单位了，当然有的地方也叫街道
+                    //通过地址得到坐标
+                    addressToLatlng()
                 }
             } else {
                 showMsg(districtResult.aMapException.errorCode.toString())
             }
         }
+    }
+
+    /**
+     * 地址转经纬度坐标
+     */
+    private fun addressToLatlng() {
+        //关闭抽屉
+        binding.drawerLayout.closeDrawer(GravityCompat.END)
+        // GeocodeQuery 有两个参数 一个是当前所选城市，第二个是当前地的上级城市，
+        Log.e(
+            TAG,
+            "onDistrictSearched: " + districtArray[index].toString() + "  ,  " + districtArray[index - 2]
+        )
+        val query = GeocodeQuery(districtArray[index], districtArray[index - 2])
+        geocoderSearch!!.getFromLocationNameAsyn(query)
+
+        //重置行政区
+        index = 0
+        //搜索行政区
+        districtArray[index] = "中国"
+        districtSearch(districtArray[index])
+    }
+
+    /**
+     * 切换地图中心
+     */
+    private fun switchMapCenter(geocodeResult: GeocodeResult, latLonPoint: LatLonPoint) {
+        //显示解析后的坐标，
+        val latitude = latLonPoint.latitude
+        val longitude = latLonPoint.longitude
+        //创建经纬度对象
+        val latLng = LatLng(latitude, longitude)
+        //改变地图中心点
+        //参数依次是：视角调整区域的中心点坐标、希望调整到的缩放级别、俯仰角0°~45°（垂直与地图时为0）、偏航角 0~360° (正北方为0)
+        val mCameraUpdate = CameraUpdateFactory.newCameraPosition(CameraPosition(latLng, 18F, 30F, 0F))
+        //在地图上添加marker
+        aMap!!.addMarker(
+            MarkerOptions().position(latLng).title(geocodeResult.geocodeQuery.locationName)
+                .snippet("DefaultMarker")
+        )
+        //动画移动
+        aMap!!.animateCamera(mCameraUpdate)
     }
 
 
