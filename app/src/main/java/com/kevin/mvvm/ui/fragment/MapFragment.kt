@@ -12,11 +12,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout.DrawerListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.amap.api.maps.AMap
-import com.amap.api.maps.AMapException
 import com.amap.api.maps.AMapOptions
 import com.amap.api.maps.MapsInitializer
 import com.amap.api.maps.model.MyLocationStyle
+import com.amap.api.services.core.AMapException
+import com.amap.api.services.core.AMapException.CODE_AMAP_SUCCESS
 import com.amap.api.services.core.LatLonPoint
+import com.amap.api.services.district.DistrictItem
+import com.amap.api.services.district.DistrictResult
 import com.amap.api.services.district.DistrictSearch
 import com.amap.api.services.district.DistrictSearchQuery
 import com.amap.api.services.geocoder.GeocodeResult
@@ -34,7 +37,8 @@ import com.kevin.mvvm.ui.adapter.ForecastAdapter
 
 class MapFragment : BaseFragment(), AMap.OnMyLocationChangeListener,
     GeocodeSearch.OnGeocodeSearchListener,
-    WeatherSearch.OnWeatherSearchListener {
+    WeatherSearch.OnWeatherSearchListener,
+    DistrictSearch.OnDistrictSearchListener{
 
     private val TAG = MapFragment::class.java.simpleName
 
@@ -53,10 +57,16 @@ class MapFragment : BaseFragment(), AMap.OnMyLocationChangeListener,
     private val weatherForecast: MutableList<LocalDayWeatherForecast>? = null
 
     //地区搜索
-    private val districtSearch: DistrictSearch? = null
+    private var districtSearch: DistrictSearch? = null
 
     //地区搜索查询
-    private val districtSearchQuery: DistrictSearchQuery? = null
+    private var districtSearchQuery: DistrictSearchQuery? = null
+
+    //数组下标
+    private val index = 0
+
+    //行政区数组
+    private val districtArray = arrayOfNulls<String>(5)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -92,7 +102,22 @@ class MapFragment : BaseFragment(), AMap.OnMyLocationChangeListener,
 
         initMap()
         initSearch()
+        //搜索行政区
+        districtArray[index] = "中国"
+        districtSearch(districtArray[index])
     }
+
+    /**
+     * 行政区搜索
+     */
+    fun districtSearch(name: String?) {
+        //设置查询关键字
+        districtSearchQuery!!.keywords = name
+        districtSearch!!.query = districtSearchQuery
+        // 异步查询行政区
+        districtSearch!!.searchDistrictAsyn()
+    }
+
 
     /**
      * 初始化地图
@@ -123,8 +148,13 @@ class MapFragment : BaseFragment(), AMap.OnMyLocationChangeListener,
      */
     private fun initSearch() {
         try {
+            //初始化地理编码搜索
             geocoderSearch = GeocodeSearch(requireActivity())
             geocoderSearch!!.setOnGeocodeSearchListener(this)
+            //初始化城市行政区搜索
+            districtSearch = DistrictSearch(requireActivity())
+            districtSearch!!.setOnDistrictSearchListener(this)
+            districtSearchQuery = DistrictSearchQuery()
         } catch (e: AMapException) {
             e.printStackTrace()
         }
@@ -260,6 +290,28 @@ class MapFragment : BaseFragment(), AMap.OnMyLocationChangeListener,
         //弹窗关闭时显示浮动按钮
         dialog.setOnDismissListener { binding.fabWeather.show() }
         dialog.show()
+    }
+
+    override fun onDistrictSearched(districtResult: DistrictResult?) {
+        if (districtResult != null) {
+            if (districtResult.aMapException
+                    .errorCode === AMapException.CODE_AMAP_SUCCESS
+            ) {
+                val nameList: MutableList<String> = ArrayList()
+                val subDistrict1: List<DistrictItem> =
+                    districtResult.district[0].subDistrict
+                for (i in subDistrict1.indices) {
+                    val name: String = subDistrict1[i].name
+                    nameList.add(name)
+                }
+                Log.e(TAG, "onDistrictSearched: " + subDistrict1.size)
+                for (districtItem in subDistrict1) {
+                    Log.e(TAG, "onDistrictSearched: " + districtItem.name)
+                }
+            } else {
+                showMsg(districtResult.aMapException.errorCode.toString())
+            }
+        }
     }
 
 
