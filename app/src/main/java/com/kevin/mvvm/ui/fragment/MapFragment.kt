@@ -16,7 +16,6 @@ import com.amap.api.maps.AMapOptions
 import com.amap.api.maps.MapsInitializer
 import com.amap.api.maps.model.MyLocationStyle
 import com.amap.api.services.core.AMapException
-import com.amap.api.services.core.AMapException.CODE_AMAP_SUCCESS
 import com.amap.api.services.core.LatLonPoint
 import com.amap.api.services.district.DistrictItem
 import com.amap.api.services.district.DistrictResult
@@ -32,6 +31,7 @@ import com.google.gson.Gson
 import com.kevin.mvvm.R
 import com.kevin.mvvm.databinding.DialogWeatherBinding
 import com.kevin.mvvm.databinding.MapFragmentBinding
+import com.kevin.mvvm.ui.adapter.CityAdapter
 import com.kevin.mvvm.ui.adapter.ForecastAdapter
 
 
@@ -63,7 +63,7 @@ class MapFragment : BaseFragment(), AMap.OnMyLocationChangeListener,
     private var districtSearchQuery: DistrictSearchQuery? = null
 
     //数组下标
-    private val index = 0
+    private var index = 0
 
     //行政区数组
     private val districtArray = arrayOfNulls<String>(5)
@@ -307,6 +307,13 @@ class MapFragment : BaseFragment(), AMap.OnMyLocationChangeListener,
                 Log.e(TAG, "onDistrictSearched: " + subDistrict1.size)
                 for (districtItem in subDistrict1) {
                     Log.e(TAG, "onDistrictSearched: " + districtItem.name)
+                }
+                //设置数据源
+                if (nameList.size != 0) {
+                    //设置数据源
+                    val cityAdapter = CityAdapter(nameList)
+                    binding.rvCity.layoutManager = LinearLayoutManager(requireActivity())
+                    binding.rvCity.adapter = cityAdapter
                 }
             } else {
                 showMsg(districtResult.aMapException.errorCode.toString())
