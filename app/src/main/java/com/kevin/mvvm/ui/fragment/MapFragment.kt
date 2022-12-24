@@ -7,7 +7,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
+import androidx.drawerlayout.widget.DrawerLayout.DrawerListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.amap.api.maps.AMap
 import com.amap.api.maps.AMapException
@@ -15,6 +17,8 @@ import com.amap.api.maps.AMapOptions
 import com.amap.api.maps.MapsInitializer
 import com.amap.api.maps.model.MyLocationStyle
 import com.amap.api.services.core.LatLonPoint
+import com.amap.api.services.district.DistrictSearch
+import com.amap.api.services.district.DistrictSearchQuery
 import com.amap.api.services.geocoder.GeocodeResult
 import com.amap.api.services.geocoder.GeocodeSearch
 import com.amap.api.services.geocoder.RegeocodeQuery
@@ -23,9 +27,9 @@ import com.amap.api.services.weather.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.gson.Gson
 import com.kevin.mvvm.R
-import com.kevin.mvvm.ui.adapter.ForecastAdapter
 import com.kevin.mvvm.databinding.DialogWeatherBinding
 import com.kevin.mvvm.databinding.MapFragmentBinding
+import com.kevin.mvvm.ui.adapter.ForecastAdapter
 
 
 class MapFragment : BaseFragment(), AMap.OnMyLocationChangeListener,
@@ -48,6 +52,11 @@ class MapFragment : BaseFragment(), AMap.OnMyLocationChangeListener,
     //天气预报列表
     private val weatherForecast: MutableList<LocalDayWeatherForecast>? = null
 
+    //地区搜索
+    private val districtSearch: DistrictSearch? = null
+
+    //地区搜索查询
+    private val districtSearchQuery: DistrictSearchQuery? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -65,6 +74,21 @@ class MapFragment : BaseFragment(), AMap.OnMyLocationChangeListener,
         binding.mapView.onCreate(savedInstanceState)
         //点击按钮显示天气弹窗
         binding.fabWeather.setOnClickListener {showWeatherDialog()}
+        //点击按钮显示城市弹窗，显示这个抽屉页面，这里设置是从屏幕右侧打开
+        binding.fabCity.setOnClickListener { binding.drawerLayout.openDrawer(GravityCompat.END) }
+        //抽屉菜单监听
+        binding.drawerLayout.addDrawerListener(object : DrawerListener {
+            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
+            override fun onDrawerOpened(drawerView: View) {
+                binding.fabCity.hide()
+            }
+
+            override fun onDrawerClosed(drawerView: View) {
+                binding.fabCity.show()
+            }
+
+            override fun onDrawerStateChanged(newState: Int) {}
+        })
 
         initMap()
         initSearch()
@@ -202,10 +226,12 @@ class MapFragment : BaseFragment(), AMap.OnMyLocationChangeListener,
      * 天气预报返回
      */
     override fun onWeatherForecastSearched(p0: LocalWeatherForecastResult?, p1: Int) {
+        binding.fabCity.show()
         forecastResult = p0!!.forecastResult
         if (forecastResult != null) {
             Log.e(TAG, "onWeatherForecastSearched: " + Gson().toJson(forecastResult))
             binding.fabWeather.show()
+            binding.fabCity.show()
         } else {
             showMsg("天气预报数据为空")
         }

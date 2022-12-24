@@ -3,28 +3,65 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <FrameLayout
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ui.fragment.MapFragment">
-
-        <com.amap.api.maps.MapView
-            android:id="@+id/map_view"
+        android:layout_height="match_parent">
+        <!-- 主页面 -->
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            tools:context=".ui.fragment.MapFragment">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_weather"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:layout_margin="20dp"
-            android:visibility="gone"
-            android:contentDescription="天气"
-            android:src="@mipmap/ic_weather"
-            app:backgroundTint="@color/white"
-            app:fabSize="auto"
-            tools:ignore="UsingOnClickInXml" />
+            <com.amap.api.maps.MapView
+                android:id="@+id/map_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
-    </FrameLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="20dp"
+                android:orientation="vertical">
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fab_weather"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:contentDescription="天气"
+                    android:src="@mipmap/ic_weather"
+                    android:visibility="gone"
+                    app:backgroundTint="@color/white"
+                    app:fabSize="auto"
+                    tools:ignore="UsingOnClickInXml" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fab_city"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:contentDescription="城市"
+                    android:src="@mipmap/ic_city"
+                    android:visibility="gone"
+                    app:backgroundTint="@color/white"
+                    app:fabSize="auto"
+                    tools:ignore="UsingOnClickInXml" />
+            </LinearLayout>
+
+        </RelativeLayout>
+        <!-- 抽屉页面 -->
+        <LinearLayout
+            android:id="@+id/lay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+        </LinearLayout>
+    </androidx.drawerlayout.widget.DrawerLayout>
+
 </layout>
