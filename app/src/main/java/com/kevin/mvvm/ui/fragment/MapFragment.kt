@@ -111,6 +111,7 @@ class MapFragment : BaseFragment(), AMap.OnMyLocationChangeListener,
      * 行政区搜索
      */
     fun districtSearch(name: String?) {
+        binding.name = name
         //设置查询关键字
         districtSearchQuery!!.keywords = name
         districtSearch!!.query = districtSearchQuery
@@ -316,6 +317,18 @@ class MapFragment : BaseFragment(), AMap.OnMyLocationChangeListener,
                     cityAdapter.setOnItemClickListener { adapter, view, position ->
                         index++
                         districtArray[index] = nameList[position]
+
+                        binding.ivBack.visibility = View.VISIBLE
+                        //返回键的监听
+                        binding.ivBack.setOnClickListener { v ->
+                            index--
+                            //搜索上级行政区
+                            districtSearch(districtArray[index])
+                            if ("中国" == districtArray[index]) {
+                                binding.ivBack.visibility = View.GONE
+                            }
+                        }
+
                         //搜索此区域的下级行政区
                         districtSearch(districtArray[index])
                     }
