@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <data>
+        <variable
+            name="forecast"
+            type="com.amap.api.services.weather.LocalDayWeatherForecast" />
+        <!--引入一个工具类-->
+        <import type="com.kevin.mvvm.utils.EasyDate" />
+    </data>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -12,6 +20,7 @@
             android:id="@+id/tv_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@{forecast.date}"
             android:textColor="@color/white" />
 
         <TextView
@@ -27,6 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
+            android:text="@{forecast.dayTemp+`° /`+ forecast.nightTemp+`°`}"
             android:textColor="@color/white" />
     </RelativeLayout>
 </layout>

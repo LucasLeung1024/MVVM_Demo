@@ -28,10 +28,10 @@ import com.amap.api.services.district.DistrictSearchQuery
 import com.amap.api.services.geocoder.*
 import com.amap.api.services.weather.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.gson.Gson
 import com.kevin.mvvm.R
 import com.kevin.mvvm.databinding.DialogWeatherBinding
 import com.kevin.mvvm.databinding.MapFragmentBinding
+import com.kevin.mvvm.model.LiveWeather
 import com.kevin.mvvm.ui.adapter.CityAdapter
 import com.kevin.mvvm.ui.adapter.ForecastAdapter
 
@@ -59,7 +59,7 @@ class MapFragment : BaseFragment(), AMap.OnMyLocationChangeListener,
     private var forecastResult: LocalWeatherForecast? = null
 
     //天气预报列表
-    private val weatherForecast: MutableList<LocalDayWeatherForecast>? = null
+    private var weatherForecast: MutableList<LocalDayWeatherForecast>? = null
 
     //地区搜索
     private var districtSearch: DistrictSearch? = null
@@ -87,6 +87,9 @@ class MapFragment : BaseFragment(), AMap.OnMyLocationChangeListener,
         MapsInitializer.updatePrivacyShow(requireActivity(), true, true)
         MapsInitializer.updatePrivacyAgree(requireActivity(), true)
         binding.mapView.onCreate(savedInstanceState)
+        //显示加载弹窗
+        showLoading()
+        binding.fabCity.show()
         //点击按钮显示天气弹窗
         binding.fabWeather.setOnClickListener {showWeatherDialog()}
         //点击按钮显示城市弹窗，显示这个抽屉页面，这里设置是从屏幕右侧打开
@@ -277,13 +280,12 @@ class MapFragment : BaseFragment(), AMap.OnMyLocationChangeListener,
     /**
      * 天气预报返回
      */
-    override fun onWeatherForecastSearched(p0: LocalWeatherForecastResult?, p1: Int) {
-        binding.fabCity.show()
-        forecastResult = p0!!.forecastResult
-        if (forecastResult != null) {
-            Log.e(TAG, "onWeatherForecastSearched: " + Gson().toJson(forecastResult))
+    override fun onWeatherForecastSearched(localWeatherForecastResult: LocalWeatherForecastResult?, p1: Int) {
+        weatherForecast = localWeatherForecastResult!!.forecastResult.weatherForecast
+        if (weatherForecast != null) {
             binding.fabWeather.show()
-            binding.fabCity.show()
+            //隐藏加载弹窗
+            dismissLoading()
         } else {
             showMsg("天气预报数据为空")
         }
@@ -302,7 +304,7 @@ class MapFragment : BaseFragment(), AMap.OnMyLocationChangeListener,
                 null,
                 false)
         //设置数据源
-        //weatherBinding.setLiveWeather(LiveWeather(district!!, liveResult!!))
+        weatherBinding.liveWeather = LiveWeather(district!!, liveResult!!)
         //配置天气预报列表
         val forecastAdapter = ForecastAdapter(weatherForecast!!)
         weatherBinding.rvForecast.layoutManager = LinearLayoutManager(requireActivity())
@@ -316,6 +318,7 @@ class MapFragment : BaseFragment(), AMap.OnMyLocationChangeListener,
 
     override fun onDistrictSearched(districtResult: DistrictResult?) {
         if (districtResult != null) {
+            dismissLoading()
             if (districtResult.aMapException
                     .errorCode === AMapException.CODE_AMAP_SUCCESS
             ) {
@@ -336,6 +339,9 @@ class MapFragment : BaseFragment(), AMap.OnMyLocationChangeListener,
                     binding.rvCity.layoutManager = LinearLayoutManager(requireActivity())
                     //item点击事件
                     cityAdapter.setOnItemClickListener { adapter, view, position ->
+
+                        showLoading()
+
                         index++
                         districtArray[index] = nameList[position]
 
@@ -368,6 +374,7 @@ class MapFragment : BaseFragment(), AMap.OnMyLocationChangeListener,
      * 地址转经纬度坐标
      */
     private fun addressToLatlng() {
+        showLoading()
         //关闭抽屉
         binding.drawerLayout.closeDrawer(GravityCompat.END)
         // GeocodeQuery 有两个参数 一个是当前所选城市，第二个是当前地的上级城市，
@@ -404,6 +411,10 @@ class MapFragment : BaseFragment(), AMap.OnMyLocationChangeListener,
         )
         //动画移动
         aMap!!.animateCamera(mCameraUpdate)
+
+        //移动地图后通过坐标转地址，触发onRegeocodeSearched回调，在这个回调里去查询天气
+        val query = RegeocodeQuery(latLonPoint, 20F, GeocodeSearch.AMAP)
+        geocoderSearch!!.getFromLocationAsyn(query)
     }
 
 

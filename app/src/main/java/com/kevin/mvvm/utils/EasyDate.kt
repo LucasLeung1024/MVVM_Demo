@@ -228,6 +228,7 @@ object EasyDate {
      * @param dateTime 例如 2021-06-20
      * @return 例如 星期日
      */
+
     fun getWeek(dateTime: String): String {
         val cal = Calendar.getInstance()
         if ("" == dateTime) {
