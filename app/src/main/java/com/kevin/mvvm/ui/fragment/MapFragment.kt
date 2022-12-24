@@ -308,11 +308,17 @@ class MapFragment : BaseFragment(), AMap.OnMyLocationChangeListener,
                 for (districtItem in subDistrict1) {
                     Log.e(TAG, "onDistrictSearched: " + districtItem.name)
                 }
-                //设置数据源
                 if (nameList.size != 0) {
                     //设置数据源
                     val cityAdapter = CityAdapter(nameList)
                     binding.rvCity.layoutManager = LinearLayoutManager(requireActivity())
+                    //item点击事件
+                    cityAdapter.setOnItemClickListener { adapter, view, position ->
+                        index++
+                        districtArray[index] = nameList[position]
+                        //搜索此区域的下级行政区
+                        districtSearch(districtArray[index])
+                    }
                     binding.rvCity.adapter = cityAdapter
                 }
             } else {
