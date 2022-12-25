@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-parcelize'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
+    id 'com.google.dagger.hilt.android'
 }
 
 android {
@@ -59,6 +60,7 @@ android {
 apply plugin: 'kotlin-kapt'
 kapt {
     generateStubs = true
+    correctErrorTypes true // Allow references to generated code
 }
 
 dependencies {
@@ -108,4 +110,8 @@ dependencies {
 
     //加载lib下的jar文件
     implementation fileTree(include: '*.jar', dir: 'libs')
+
+    //Hilt
+    implementation "com.google.dagger:hilt-android:2.44"
+    kapt "com.google.dagger:hilt-compiler:2.44"
 }
