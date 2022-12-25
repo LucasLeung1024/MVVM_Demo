@@ -8,13 +8,14 @@ import android.os.Environment
 import android.provider.Settings
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.Nullable
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.kevin.mvvm.BaseApplication
-import com.kevin.mvvm.utils.PermissionUtils
 import com.kevin.mvvm.ui.view.dialog.LoadingDialog
+import com.kevin.mvvm.utils.PermissionUtils
 
 
 /**
@@ -161,10 +162,21 @@ open class BaseActivity : AppCompatActivity() {
     /**
      * 请求外部存储管理 Android11版本时获取文件读写权限时调用
      */
-    protected open fun requestManageExternalStorage() {
+//    protected open fun requestManageExternalStorage() {
+//        val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
+//        intent.data = Uri.parse("package:$packageName")
+//        startActivityForResult(intent, PermissionUtils.REQUEST_MANAGE_EXTERNAL_STORAGE_CODE)
+//    }
+
+    /**
+     * 请求外部存储管理 Android11版本时获取文件读写权限时调用 新的方式
+     */
+    @RequiresApi(Build.VERSION_CODES.R)
+    protected open fun requestManageExternalStorage(intentActivityResultLauncher: ActivityResultLauncher<Intent>?) {
         val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
         intent.data = Uri.parse("package:$packageName")
-        startActivityForResult(intent, PermissionUtils.REQUEST_MANAGE_EXTERNAL_STORAGE_CODE)
+        intentActivityResultLauncher!!.launch(intent)
     }
+
 
 }

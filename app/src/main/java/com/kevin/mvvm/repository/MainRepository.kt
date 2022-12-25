@@ -11,6 +11,7 @@ import com.kevin.mvvm.utils.Constant
 import com.kevin.mvvm.utils.EasyDate
 import com.kevin.mvvm.utils.MVUtils
 import kotlinx.coroutines.Dispatchers
+import javax.inject.Inject
 
 object MainRepository: BaseRepository() {
     private val TAG = MainRepository::class.java.simpleName
