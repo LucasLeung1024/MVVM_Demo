@@ -75,9 +75,9 @@ public class CameraUtils {
      * 4.4及以上系统处理图片的方法
      */
     @TargetApi(Build.VERSION_CODES.KITKAT)
-    public static String getImageOnKitKatPath(Intent data, Context context) {
+    public static String getImageOnKitKatPath(Uri uri, Context context) {
         String imagePath = null;
-        Uri uri = data.getData();
+        //Uri uri = data.getData();
         Log.d("uri=intent.getData :", "" + uri);
         if (DocumentsContract.isDocumentUri(context, uri)) {
             //数据表里指定的行
