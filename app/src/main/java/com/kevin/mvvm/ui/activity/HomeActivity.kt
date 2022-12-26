@@ -3,7 +3,6 @@ package com.kevin.mvvm.ui.activity
 import android.content.ContentValues
 import android.content.DialogInterface
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -17,8 +16,6 @@ import android.widget.LinearLayout
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
-import androidx.core.content.FileProvider
-import androidx.core.os.EnvironmentCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
@@ -31,9 +28,7 @@ import com.kevin.mvvm.databinding.NavHeaderBinding
 import com.kevin.mvvm.db.bean.User
 import com.kevin.mvvm.ui.view.dialog.AlertDialog
 import com.kevin.mvvm.utils.*
-import com.kevin.mvvm.utils.EasyDate.milliSecond
 import com.kevin.mvvm.viewmodel.HomeViewModel
-import java.io.File
 
 
 class HomeActivity : BaseActivity() {
@@ -69,8 +64,6 @@ class HomeActivity : BaseActivity() {
     private var isShow = false
     //用于保存拍照图片的uri
     private var mCameraUri: Uri? = null
-    // 用于保存图片的文件路径，Android 10以下使用图片路径访问图片
-    private var mCameraImagePath: String? = null
 
     //viewBinding
     private lateinit var binding: ActivityHomeBinding
@@ -117,9 +110,7 @@ class HomeActivity : BaseActivity() {
         }
         // 提示用户选择文档，返回它的Uri。
         openAlbumActivityResultLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { result ->
-            modifyAvatar(
-                result.toString()
-            )
+            modifyAvatar(CameraUtils.getImageOnKitKatPath(result, this))
         }
         //多个权限返回结果
         permissionActivityResultLauncher =
@@ -173,7 +164,11 @@ class HomeActivity : BaseActivity() {
         binding.ivAvatar.setOnClickListener { binding.drawerLayout.open() }
         binding.navView.setNavigationItemSelectedListener { item ->
             when (item.itemId) {
+                R.id.item_notebook -> //记事本
+                {jumpActivity(NotebookActivity::class.java)}
                 R.id.item_setting -> {}
+                R.id.item_about ->
+                {jumpActivity(AboutActivity::class.java)}
                 R.id.item_logout -> logout()
                 else -> {}
             }
@@ -310,7 +305,7 @@ class HomeActivity : BaseActivity() {
         modifyUserInfoDialog!!.dismiss()
         if (!isAndroid6()) {
             //打开相机
-            openCamera()
+            takePicture()
             return
         }
         if (!hasPermission(PermissionUtils.CAMERA)) {
@@ -318,57 +313,57 @@ class HomeActivity : BaseActivity() {
             return
         }
         //打开相机
-        openCamera()
+        takePicture()
     }
 
     /**
      * 调起相机拍照
      */
-    private fun openCamera() {
-        val captureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        // 判断是否有相机
-        if (captureIntent.resolveActivity(packageManager) != null) {
-            var photoFile: File? = null
-            var photoUri: Uri? = null
-            if (isAndroid10()) {
-                // 适配android 10 创建图片地址uri,用于保存拍照后的照片 Android 10以后使用这种方法
-                photoUri =
-                    contentResolver.insert(if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) MediaStore.Images.Media.EXTERNAL_CONTENT_URI else MediaStore.Images.Media.INTERNAL_CONTENT_URI,
-                        ContentValues())
-            } else {
-                photoFile = createImageFile()
-                if (photoFile != null) {
-                    mCameraImagePath = photoFile.absolutePath
-                    photoUri = if (isAndroid7()) {
-                        //适配Android 7.0文件权限，通过FileProvider创建一个content类型的Uri
-                        FileProvider.getUriForFile(this, "$packageName.fileprovider", photoFile)
-                    } else {
-                        Uri.fromFile(photoFile)
-                    }
-                }
-            }
-            mCameraUri = photoUri
-            if (photoUri != null) {
-                captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
-                captureIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-                startActivityForResult(captureIntent, TAKE_PHOTO_CODE)
-            }
-        }
-    }
+//    private fun openCamera() {
+//        val captureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+//        // 判断是否有相机
+//        if (captureIntent.resolveActivity(packageManager) != null) {
+//            var photoFile: File? = null
+//            var photoUri: Uri? = null
+//            if (isAndroid10()) {
+//                // 适配android 10 创建图片地址uri,用于保存拍照后的照片 Android 10以后使用这种方法
+//                photoUri =
+//                    contentResolver.insert(if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) MediaStore.Images.Media.EXTERNAL_CONTENT_URI else MediaStore.Images.Media.INTERNAL_CONTENT_URI,
+//                        ContentValues())
+//            } else {
+//                photoFile = createImageFile()
+//                if (photoFile != null) {
+//                    mCameraImagePath = photoFile.absolutePath
+//                    photoUri = if (isAndroid7()) {
+//                        //适配Android 7.0文件权限，通过FileProvider创建一个content类型的Uri
+//                        FileProvider.getUriForFile(this, "$packageName.fileprovider", photoFile)
+//                    } else {
+//                        Uri.fromFile(photoFile)
+//                    }
+//                }
+//            }
+//            mCameraUri = photoUri
+//            if (photoUri != null) {
+//                captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
+//                captureIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+//                startActivityForResult(captureIntent, TAKE_PHOTO_CODE)
+//            }
+//        }
+//    }
 
     /**
      * 创建保存图片的文件
      */
-    private fun createImageFile(): File? {
-        val storageDir: File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        if (!storageDir!!.exists()) {
-            storageDir.mkdir()
-        }
-        val tempFile = File(storageDir, milliSecond + "")
-        return if (Environment.MEDIA_MOUNTED != EnvironmentCompat.getStorageState(tempFile)) {
-            null
-        } else tempFile
-    }
+//    private fun createImageFile(): File? {
+//        val storageDir: File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+//        if (!storageDir!!.exists()) {
+//            storageDir.mkdir()
+//        }
+//        val tempFile = File(storageDir, milliSecond + "")
+//        return if (Environment.MEDIA_MOUNTED != EnvironmentCompat.getStorageState(tempFile)) {
+//            null
+//        } else tempFile
+//    }
 
     /**
      * 新的拍照
@@ -440,31 +435,31 @@ class HomeActivity : BaseActivity() {
     /**
      * 权限请求结果
      */
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String?>,
-        grantResults: IntArray,
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when (requestCode) {
-            PermissionUtils.REQUEST_STORAGE_CODE -> {
-                //文件读写权限
-                if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    showMsg("您拒绝了读写文件权限，无法打开相册，抱歉。")
-                    return
-                }
-                openAlbum()
-            }
-            PermissionUtils.REQUEST_CAMERA_CODE -> {
-                if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    showMsg("您拒绝了相机权限，无法打开相机，抱歉。")
-                    return
-                }
-                openCamera()
-            }
-            else -> {}
-        }
-    }
+//    override fun onRequestPermissionsResult(
+//        requestCode: Int,
+//        permissions: Array<String?>,
+//        grantResults: IntArray,
+//    ) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+//        when (requestCode) {
+//            PermissionUtils.REQUEST_STORAGE_CODE -> {
+//                //文件读写权限
+//                if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+//                    showMsg("您拒绝了读写文件权限，无法打开相册，抱歉。")
+//                    return
+//                }
+//                openAlbum()
+//            }
+//            PermissionUtils.REQUEST_CAMERA_CODE -> {
+//                if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+//                    showMsg("您拒绝了相机权限，无法打开相机，抱歉。")
+//                    return
+//                }
+//                openCamera()
+//            }
+//            else -> {}
+//        }
+//    }
 
     /**
      * 页面返回结果
