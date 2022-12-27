@@ -1,11 +1,14 @@
 package com.kevin.mvvm.ui.activity
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.kevin.mvvm.databinding.ActivityNotebookBinding
+import com.kevin.mvvm.db.bean.Notebook
+import com.kevin.mvvm.ui.adapter.NotebookAdapter
 import com.kevin.mvvm.viewmodel.NotebookViewModel
-import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * 记事本
@@ -13,6 +16,8 @@ import dagger.hilt.android.AndroidEntryPoint
  */
 
 class NotebookActivity : BaseActivity() {
+
+    private val TAG = NotebookActivity::class.java.simpleName
 
     //viewBinding
     private lateinit var binding: ActivityNotebookBinding
@@ -28,6 +33,24 @@ class NotebookActivity : BaseActivity() {
 
         setStatusBar(true)
         back(binding.toolbar)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        vm.getNoteBooks()
+        vm.notebooks.observe(this) { results ->
+            val notebooks = results.getOrNull()
+            if (notebooks!!.isNotEmpty()) {
+                binding.rvNotebook.layoutManager = LinearLayoutManager(
+                    context
+                )
+                binding.rvNotebook.adapter = NotebookAdapter(notebooks as MutableList<Notebook>)
+                hasNotebook = true
+            } else {
+                hasNotebook = false
+            }
+            binding.hasNotebook = hasNotebook
+        }
     }
 
     /**

@@ -9,21 +9,21 @@ import androidx.appcompat.widget.AppCompatEditText
 import androidx.lifecycle.ViewModelProvider
 import com.kevin.mvvm.R
 import com.kevin.mvvm.databinding.ActivityEditBinding
-import com.kevin.mvvm.viewmodel.NotebookViewModel
+import com.kevin.mvvm.db.bean.Notebook
+import com.kevin.mvvm.viewmodel.EditViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 
 /**
  * 记事本
- * @author llw
  */
-@AndroidEntryPoint
-open class EditActivity : BaseActivity(), View.OnClickListener {
+
+class EditActivity : BaseActivity(), View.OnClickListener {
 
     //viewBinding
     private lateinit var binding: ActivityEditBinding
     //ViewModel
-    private val vm by lazy { ViewModelProvider(this)[NotebookViewModel::class.java] }
+    private val vm by lazy { ViewModelProvider(this)[EditViewModel::class.java] }
 
     private var inputMethodManager: InputMethodManager? = null
 
@@ -70,7 +70,7 @@ open class EditActivity : BaseActivity(), View.OnClickListener {
     /**
      * 显示键盘
      */
-    open fun showInput() {
+    private fun showInput() {
         binding.etContent.requestFocus()
         inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager!!.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
@@ -79,7 +79,7 @@ open class EditActivity : BaseActivity(), View.OnClickListener {
     /**
      * 隐藏键盘
      */
-    open fun dismiss() {
+    private fun dismiss() {
         if (inputMethodManager != null) {
             inputMethodManager!!.hideSoftInputFromWindow(binding.etContent.windowToken, 0)
         }
@@ -97,7 +97,10 @@ open class EditActivity : BaseActivity(), View.OnClickListener {
 
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.iv_ok -> showMsg("提交")
+            R.id.iv_ok -> {
+                vm.addNotebook(Notebook(binding.etTitle.text.toString(),binding.etContent.text.toString()))
+                finish()
+            }
         }
     }
 

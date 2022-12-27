@@ -1,16 +1,17 @@
 package com.kevin.mvvm.viewmodel
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.kevin.mvvm.db.bean.Notebook
+import com.kevin.mvvm.repository.NotebookRepository
 
 class NotebookViewModel : ViewModel() {
-//    private val notebookRepository: NotebookRepository? = null
-//
-//    var notebooks: LiveData<List<Notebook>>? = null
-//
-//    fun getNotebooks() {
-//        notebooks = notebookRepository.getNotebooks()
-//        failed = notebookRepository.failed
-//    }
+
+    var notebooks = MutableLiveData<Result<List<Notebook>>>()
+
+    fun getNoteBooks(){
+        notebooks = NotebookRepository.getNotebooks() as MutableLiveData<Result<List<Notebook>>>
+    }
+
 }

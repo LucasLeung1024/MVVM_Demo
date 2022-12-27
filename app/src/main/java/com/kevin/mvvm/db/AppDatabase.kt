@@ -10,7 +10,7 @@ import com.kevin.mvvm.db.bean.*
 import com.kevin.mvvm.db.dao.*
 
 
-@Database(entities = [Image::class, WallPaper::class, News::class, Video::class, User::class], version = 5, exportSchema = false)
+@Database(entities = [Image::class, WallPaper::class, News::class, Video::class, User::class,Notebook::class], version = 6, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun imageDao(): ImageDao
@@ -22,6 +22,8 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun newsDao(): NewsDao
 
     abstract fun userDao(): UserDao
+
+    abstract fun notebookDao(): NotebookDao
 
     companion object {
         @Volatile
@@ -105,6 +107,22 @@ abstract class AppDatabase : RoomDatabase() {
             }
         }
 
+        /**
+         * 版本升级迁移到6 在数据库中新增一个笔记表
+         */
+        val MIGRATION_5_6: Migration = object : Migration(5, 6) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                //创建笔记表
+                database.execSQL(
+                    "CREATE TABLE `notebook` " +
+                            "(uid INTEGER NOT NULL, " +
+                            "title TEXT, " +
+                            "content TEXT, " +
+                            "PRIMARY KEY(`uid`))"
+                )
+            }
+        }
+
 
         /**
          * 单例模式
@@ -116,9 +134,11 @@ abstract class AppDatabase : RoomDatabase() {
                     .addMigrations(MIGRATION_2_3)
                     .addMigrations(MIGRATION_3_4)
                     .addMigrations(MIGRATION_4_5)
+                    .addMigrations(MIGRATION_5_6)
                     .allowMainThreadQueries()
                     .build().also { instance = it }
             }
         }
+
     }
 }

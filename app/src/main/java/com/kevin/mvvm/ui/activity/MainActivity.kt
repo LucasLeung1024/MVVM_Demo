@@ -1,12 +1,13 @@
 package com.kevin.mvvm.ui.activity
 
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.appbar.AppBarLayout
-import com.kevin.mvvm.ui.adapter.WallPaperAdapter
 import com.kevin.mvvm.databinding.ActivityMainBinding
+import com.kevin.mvvm.ui.adapter.WallPaperAdapter
 import com.kevin.mvvm.viewmodel.MainViewModel
 
 class MainActivity : BaseActivity() {
@@ -65,6 +66,24 @@ class MainActivity : BaseActivity() {
 
     fun toHome(view: View?) {
         jumpActivity(HomeActivity::class.java)
+    }
+
+    private var timeMillis: Long = 0
+
+    /**
+     * Add a prompt to exit the application
+     */
+    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_DOWN) {
+            if (System.currentTimeMillis() - timeMillis > 2000) {
+                showMsg("再次按下退出应用程序")
+                timeMillis = System.currentTimeMillis()
+            } else {
+                exitTheProgram()
+            }
+            return false
+        }
+        return super.onKeyDown(keyCode, event)
     }
 
 }
