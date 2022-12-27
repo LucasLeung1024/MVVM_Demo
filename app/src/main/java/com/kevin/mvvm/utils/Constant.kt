@@ -42,4 +42,10 @@ object Constant {
      */
     const val REQUEST_TIMESTAMP_VIDEO = "videoRequestTimestamp"
 
+    /**
+     * 笔记页面视图方式
+     */
+    const val NOTEBOOK_VIEW_TYPE = "notebookViewType"
+
+
 }

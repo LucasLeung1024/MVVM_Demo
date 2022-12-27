@@ -48,7 +48,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:overScrollMode="never"
-                android:paddingStart="8dp"
+                android:paddingStart="4dp"
                 android:visibility="@{hasNotebook ? View.VISIBLE : View.GONE}"
                 android:paddingEnd="8dp"
                 android:paddingTop="8dp" />
