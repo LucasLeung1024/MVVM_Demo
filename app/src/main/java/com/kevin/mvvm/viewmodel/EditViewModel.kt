@@ -1,6 +1,5 @@
 package com.kevin.mvvm.viewmodel
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.kevin.mvvm.db.bean.Notebook
@@ -28,5 +27,13 @@ class EditViewModel : ViewModel() {
     fun updateNotebook(notebook: Notebook?) {
         NotebookRepository.updateNotebook(notebook!!)
     }
+
+    /**
+     * 删除笔记
+     */
+    fun deleteNotebook(notebook: Notebook?) {
+        NotebookRepository.deleteNotebook(notebook!!)
+    }
+
 
 }

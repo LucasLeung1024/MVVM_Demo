@@ -21,6 +21,9 @@ interface NotebookDao {
     @Query("DELETE FROM notebook")
     fun deleteAll()
 
+    @Delete
+    fun delete(notebook: Notebook)
+
     @Query("SELECT * FROM notebook WHERE uid=:uid")
     fun findById(uid: Int): Notebook
 

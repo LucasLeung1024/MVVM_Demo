@@ -128,6 +128,10 @@ class EditActivity : BaseActivity(), View.OnClickListener {
                 }
                 finish()
             }
+            R.id.iv_delete -> {
+                vm.deleteNotebook(mNotebook)
+                finish()
+            }
         }
     }
 

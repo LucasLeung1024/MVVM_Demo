@@ -30,8 +30,7 @@ object NotebookRepository : BaseRepository() {
      * @param uid id
      */
     fun getNotebookById(uid: Int): Notebook {
-        val notebook =  BaseApplication.db.notebookDao().findById(uid)
-        return notebook
+        return BaseApplication.db.notebookDao().findById(uid)
     }
 
     /**
@@ -40,8 +39,16 @@ object NotebookRepository : BaseRepository() {
      * @param notebook
      */
     fun updateNotebook(notebook: Notebook) {
-        val updateNotebook = BaseApplication.db.notebookDao().update(notebook)
+        BaseApplication.db.notebookDao().update(notebook)
     }
 
+    /**
+     * 删除笔记
+     *
+     * @param notebook
+     */
+    fun deleteNotebook(notebook: Notebook) {
+        BaseApplication.db.notebookDao().delete(notebook)
+    }
 
 }
