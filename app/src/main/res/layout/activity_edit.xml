@@ -5,6 +5,9 @@
 
     <data>
 
+        <variable
+            name="notebook"
+            type="com.kevin.mvvm.db.bean.Notebook" />
     </data>
 
     <RelativeLayout
@@ -19,7 +22,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@color/white"
             app:navigationIcon="@mipmap/ic_edit_return">
-
+            <!--保存按钮-->
             <ImageView
                 android:id="@+id/iv_ok"
                 android:layout_width="36dp"
@@ -29,6 +32,17 @@
                 android:foreground="?attr/selectableItemBackground"
                 android:padding="4dp"
                 android:src="@mipmap/ic_black_ok"
+                android:visibility="gone" />
+            <!--删除按钮-->
+            <ImageView
+                android:id="@+id/iv_delete"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_gravity="end"
+                android:layout_marginEnd="16dp"
+                android:foreground="?attr/selectableItemBackground"
+                android:padding="2dp"
+                android:src="@mipmap/ic_delete"
                 android:visibility="gone" />
         </androidx.appcompat.widget.Toolbar>
 
@@ -46,6 +60,7 @@
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:hint="标题"
+                android:text="@{notebook.title}"
                 android:textColor="@color/black"
                 android:textColorHint="@color/black"
                 android:textCursorDrawable="@drawable/custom_cursor"
@@ -60,6 +75,7 @@
                 android:cursorVisible="true"
                 android:gravity="top"
                 android:paddingTop="4dp"
+                android:text="@{notebook.content}"
                 android:textCursorDrawable="@drawable/custom_cursor" />
         </LinearLayout>
     </RelativeLayout>

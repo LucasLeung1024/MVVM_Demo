@@ -3,6 +3,7 @@ package com.kevin.mvvm.db.dao
 import androidx.room.*
 import com.kevin.mvvm.db.bean.Notebook
 
+
 @Dao
 interface NotebookDao {
     @Query("SELECT * FROM notebook")
@@ -19,4 +20,8 @@ interface NotebookDao {
 
     @Query("DELETE FROM notebook")
     fun deleteAll()
+
+    @Query("SELECT * FROM notebook WHERE uid=:uid")
+    fun findById(uid: Int): Notebook
+
 }
