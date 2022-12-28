@@ -1,5 +1,6 @@
 package com.kevin.mvvm.ui.fragment
 
+import android.app.UiModeManager
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -19,7 +20,7 @@ open class BaseFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         @Nullable container: ViewGroup?,
-        @Nullable savedInstanceState: Bundle?
+        @Nullable savedInstanceState: Bundle?,
     ): View? {
         return super.onCreateView(inflater, container, savedInstanceState)
     }
@@ -70,6 +71,11 @@ open class BaseFragment : Fragment() {
         if (loadingDialog != null) {
             loadingDialog!!.dismiss()
         }
+    }
+
+    protected open fun isNight(): Boolean {
+        val uiModeManager = requireContext().getSystemService(Context.UI_MODE_SERVICE) as UiModeManager
+        return uiModeManager.nightMode == UiModeManager.MODE_NIGHT_YES
     }
 
 }

@@ -5,7 +5,8 @@
 
     <RelativeLayout
         android:id="@+id/item_video_layout"
-        android:background="@color/white"
+        android:foreground="?attr/selectableItemBackground"
+        android:background="@color/theme_color_secondary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingStart="12dp"

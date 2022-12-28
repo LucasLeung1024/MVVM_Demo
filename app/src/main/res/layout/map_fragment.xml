@@ -40,7 +40,7 @@
                     android:contentDescription="天气"
                     android:src="@mipmap/ic_weather"
                     android:visibility="gone"
-                    app:backgroundTint="@color/white"
+                    app:backgroundTint="@color/fab_bg_color"
                     app:fabSize="auto"
                     tools:ignore="UsingOnClickInXml" />
 
@@ -52,7 +52,7 @@
                     android:contentDescription="城市"
                     android:src="@mipmap/ic_city"
                     android:visibility="gone"
-                    app:backgroundTint="@color/white"
+                    app:backgroundTint="@color/fab_bg_color"
                     app:fabSize="auto"
                     tools:ignore="UsingOnClickInXml" />
             </LinearLayout>
@@ -64,7 +64,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="end"
-            android:background="@color/white"
+            android:background="@color/theme_color_secondary"
             android:orientation="vertical">
 
             <RelativeLayout
@@ -87,7 +87,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="@{name}"
-                    android:textColor="@color/black"
+                    android:textColor="@color/text_color"
                     android:textSize="16sp" />
             </RelativeLayout>
 

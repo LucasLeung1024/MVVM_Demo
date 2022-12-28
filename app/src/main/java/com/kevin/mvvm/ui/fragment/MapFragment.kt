@@ -118,7 +118,7 @@ class MapFragment : BaseFragment(), AMap.OnMyLocationChangeListener,
     /**
      * 行政区搜索
      */
-    fun districtSearch(name: String?) {
+    private fun districtSearch(name: String?) {
         binding.name = name
         //设置查询关键字
         districtSearchQuery!!.keywords = name
@@ -150,6 +150,13 @@ class MapFragment : BaseFragment(), AMap.OnMyLocationChangeListener,
         aMap!!.isMyLocationEnabled = true
         //设置SDK 自带定位消息监听
         aMap!!.setOnMyLocationChangeListener(this)
+        //设置地图是否为夜间模式
+        if(isNight()){
+            aMap!!.mapType = AMap.MAP_TYPE_NIGHT
+        } else {
+            aMap!!.mapType = AMap.MAP_TYPE_NORMAL
+        }
+
     }
 
     /**

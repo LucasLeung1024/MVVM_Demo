@@ -14,12 +14,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/theme_color_secondary"
         android:orientation="vertical">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/purple_500">
+            android:background="@color/theme_color">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -42,6 +43,7 @@
                 android:id="@+id/tv_account"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/dialog_title_color"
                 android:text="@{viewModel.user.account}" />
 
             <TextView
@@ -59,7 +61,7 @@
                     android:id="@+id/et_account"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
+                    android:background="@color/theme_color_secondary"
                     android:hint="账号"
                     android:text="@={viewModel.user.account}" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -73,7 +75,7 @@
                     android:id="@+id/et_pwd"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
+                    android:background="@color/theme_color_secondary"
                     android:hint="密码"
                     android:inputType="textPassword"
                     android:text="@={viewModel.user.pwd}" />
@@ -87,6 +89,7 @@
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
                 android:text="登  录"
+                android:textColor="@color/white"
                 app:cornerRadius="12dp" />
 
             <LinearLayout
@@ -99,7 +102,7 @@
                 <TextView
                     android:text="注册"
                     android:onClick="toRegister"
-                    android:textColor="@color/purple_500"
+                    android:textColor="@color/dialog_title_color"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:ignore="UsingOnClickInXml" />

@@ -62,7 +62,9 @@ class NotebookActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun initView(){
-        setStatusBar(true)
+        //根据是否是深色模式设置状态栏设置
+        setStatusBar(!isNight())
+
         setSupportActionBar(binding.toolbar)
         back(binding.toolbar)
         //监听事件

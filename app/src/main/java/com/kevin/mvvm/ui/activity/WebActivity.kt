@@ -24,7 +24,11 @@ class WebActivity : BaseActivity() {
         setContentView(binding.root)
 
         binding.webView.webViewClient = client
-        setStatusBar(true)
+        setStatusBar(!isNight())
+
+        //enable: true(日间模式)，enable:false(夜间模式)
+        binding.webView.settingsExtension.setDayOrNight(!isNight())
+
         // 在调用TBS初始化、创建WebView之前进行如下配置
         vm.setUniqueKey(intent.getStringExtra("uniquekey").toString())
         vm.newsDetailsResponse.observe(this) { result ->

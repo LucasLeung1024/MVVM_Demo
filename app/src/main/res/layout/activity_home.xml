@@ -18,7 +18,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="@color/purple_500">
+                android:background="@color/theme_color">
 
                 <!--圆形图片-->
                 <com.kevin.mvvm.ui.view.CustomImageView
@@ -58,7 +58,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:layout_alignParentBottom="true"
-                android:background="#FFF"
+                android:background="@color/bnv_bg_color"
+                app:itemIconTint="@color/bvn_color_selector"
+                app:itemTextColor="@color/bvn_color_selector"
                 app:menu="@menu/navigation_menu" />
 
         </RelativeLayout>
@@ -71,8 +73,8 @@
             android:layout_gravity="start"
             app:headerLayout="@layout/nav_header"
             app:itemIconSize="24dp"
-            app:itemIconTint="#000"
-            app:itemTextColor="#000"
+            app:itemIconTint="@color/text_color"
+            app:itemTextColor="@color/text_color"
             app:menu="@menu/nav_menu" />
 
     </androidx.drawerlayout.widget.DrawerLayout>

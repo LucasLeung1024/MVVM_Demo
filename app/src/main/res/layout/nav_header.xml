@@ -11,7 +11,7 @@
             android:id="@+id/lay_user_info"
             android:layout_width="match_parent"
             android:layout_height="120dp"
-            android:background="@color/purple_500">
+            android:background="@color/theme_color">
             <!--头像-->
             <com.kevin.mvvm.ui.view.CustomImageView
                 android:id="@+id/iv_avatar"

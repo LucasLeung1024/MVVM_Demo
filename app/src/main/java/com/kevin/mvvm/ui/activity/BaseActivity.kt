@@ -1,5 +1,7 @@
 package com.kevin.mvvm.ui.activity
 
+import android.app.UiModeManager
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -176,6 +178,11 @@ open class BaseActivity : AppCompatActivity() {
         val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
         intent.data = Uri.parse("package:$packageName")
         intentActivityResultLauncher!!.launch(intent)
+    }
+
+    protected open fun isNight(): Boolean {
+        val uiModeManager = context!!.getSystemService(Context.UI_MODE_SERVICE) as UiModeManager
+        return uiModeManager.nightMode == UiModeManager.MODE_NIGHT_YES
     }
 
 

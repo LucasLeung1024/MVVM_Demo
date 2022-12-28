@@ -53,7 +53,7 @@
             android:id="@+id/tv_sure"
             android:layout_width="150dp"
             android:layout_height="50dp"
-            android:textColor="@color/purple_500"
+            android:textColor="@color/dialog_title_color"
             android:layout_below="@+id/v_line"
             android:textSize="@dimen/sp_14"
             android:layout_toEndOf="@+id/tv_cancel"

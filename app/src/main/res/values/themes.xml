@@ -2,38 +2,50 @@
     <!-- Base application theme. -->
     <style name="Theme.MVVMDemo" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryVariant">@color/purple_500</item>
-        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimary">@color/color_primary</item>
+        <item name="colorPrimaryVariant">@color/color_primary_variant</item>
+        <item name="colorOnPrimary">@color/color_on_primary</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_200</item>
-        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorSecondary">@color/color_secondary</item>
+        <item name="colorSecondaryVariant">@color/color_secondary_variant</item>
+        <item name="colorOnSecondary">@color/color_on_secondary</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
 
-    <!-- 圆角图片 -->
-    <style name="roundedImageStyle">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">24dp</item>
+    <!-- Base application theme. -->
+    <style name="HomeTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/color_primary</item>
+        <item name="colorPrimaryVariant">@color/color_primary_variant</item>
+        <item name="colorOnPrimary">@color/color_on_primary</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/color_secondary</item>
+        <item name="colorSecondaryVariant">@color/color_secondary_variant</item>
+        <item name="colorOnSecondary">@color/color_on_secondary</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
     </style>
 
-    <style name="Theme.MVVM_1.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+    <style name="SplashTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:statusBarColor" tools:targetApi="lollipop">#00FFFFFF</item><!--设置状态栏的颜色-->
     </style>
 
-    <style name="Theme.MVVM_1.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="Theme.MVVM_1.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="SplashThemePlus" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/color_primary</item>
+        <item name="colorPrimaryVariant">@color/color_primary_variant</item>
+        <item name="statusBarBackground">@color/color_primary</item>
+        <item name="android:statusBarColor">@color/color_primary</item>
+        <item name="android:windowBackground">@drawable/splash_bg</item>
+    </style>
 
     <!--主页面样式-->
     <style name="MainTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryDark">@color/purple_500</item>
+        <item name="colorPrimary">@color/color_primary</item>
+        <item name="colorPrimaryDark">@color/color_primary</item>
         <item name="colorAccent">@color/white</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
@@ -41,14 +53,16 @@
     <!--图片页面样式-->
     <style name="ImageTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:background">@android:color/transparent</item>
-        <item name="android:statusBarColor">@android:color/transparent
+        <item name="android:statusBarColor" tools:targetApi="lollipop">@android:color/transparent
         </item>
         <item name="android:windowTranslucentStatus">false</item>
         <item name="android:windowTranslucentNavigation">true</item>
     </style>
 
-    <style name="SplashTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="android:statusBarColor">#00FFFFFF</item><!--设置状态栏的颜色-->
+    <!-- 圆角图片 -->
+    <style name="roundedImageStyle">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">24dp</item>
     </style>
 
     <!-- 圆角图片 -->
@@ -66,7 +80,7 @@
     <style name="loading_dialog" parent="android:style/Theme.Dialog">
         <item name="android:windowFrame">@null</item>
         <item name="android:windowNoTitle">true</item>
-        <item name="android:windowBackground">@drawable/shape_bg_white_radius_24</item>
+        <item name="android:windowBackground">@drawable/shape_bg_radius_24</item>
         <item name="android:windowIsFloating">true</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
@@ -97,6 +111,19 @@
         <item name="android:windowExitAnimation">@anim/dialog_scale_anim_out</item>
     </style>
 
+    <style name="dialog_from_right_anim">
+        <item name="android:windowEnterAnimation">@anim/dialog_from_right_anim_in</item>
+        <item name="android:windowExitAnimation">@anim/dialog_from_right_anim_out</item>
+    </style>
+
+    <style name="BottomSheetDialogStyle" parent="Theme.Design.BottomSheetDialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
     <style name="BottomSheetDialogStyle_Light" parent="Theme.Design.BottomSheetDialog">
         <item name="android:windowFrame">@null</item>
         <item name="android:windowIsFloating">true</item>
@@ -104,15 +131,6 @@
         <item name="android:background">@android:color/transparent</item>
         <item name="android:backgroundDimEnabled">false</item>
     </style>
-
-    <style name="SplashThemePlus" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/green</item>
-        <item name="colorPrimaryVariant">@color/green</item>
-        <item name="statusBarBackground">@color/green</item>
-        <item name="android:statusBarColor">@color/green</item>
-        <item name="android:windowBackground">@drawable/splash_bg</item>
-    </style>
-
 
 
 </resources>
