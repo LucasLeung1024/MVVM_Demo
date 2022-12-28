@@ -1,14 +1,17 @@
 package com.kevin.mvvm.repository
 
-import androidx.lifecycle.MutableLiveData
 import com.kevin.mvvm.BaseApplication
 import com.kevin.mvvm.db.bean.Notebook
+import com.kevin.mvvm.db.bean.WallPaper
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 
 object NotebookRepository : BaseRepository() {
 
     private val TAG = UserRepository::class.java.simpleName
+
+    var noteBookList: MutableList<Notebook> = arrayListOf()
 
     /**
      * 添加笔记
@@ -20,9 +23,11 @@ object NotebookRepository : BaseRepository() {
     /**
      * 获取所有笔记
      */
-    fun getNotebooks() = fire(Dispatchers.IO) {
-        val notebookList = BaseApplication.db.notebookDao().getAll()
-        Result.success(notebookList)
+    suspend fun getNotebooks(): MutableList<Notebook> {
+        withContext(Dispatchers.IO) {
+            noteBookList = BaseApplication.db.notebookDao().getAll()
+        }
+        return noteBookList
     }
 
     /**
@@ -47,8 +52,14 @@ object NotebookRepository : BaseRepository() {
      *
      * @param notebook
      */
-    fun deleteNotebook(notebook: Notebook) {
-        BaseApplication.db.notebookDao().delete(notebook)
+//    fun deleteNotebook(notebook: Notebook) {
+//        BaseApplication.db.notebookDao().delete(notebook)
+//    }
+    //这个表示删除一个笔记也可以，删除多个笔记也可以
+    fun deleteNotebook(vararg notebook: Notebook) {
+        BaseApplication.db.notebookDao().delete(*notebook)
     }
+
+
 
 }
