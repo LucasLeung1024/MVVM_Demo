@@ -1,10 +1,11 @@
 package com.kevin.mvvm.repository
 
+import androidx.lifecycle.MutableLiveData
 import com.kevin.mvvm.BaseApplication
 import com.kevin.mvvm.db.bean.Notebook
-import com.kevin.mvvm.db.bean.WallPaper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.util.Collections.emptyList
 
 
 object NotebookRepository : BaseRepository() {
@@ -60,6 +61,14 @@ object NotebookRepository : BaseRepository() {
         BaseApplication.db.notebookDao().delete(*notebook)
     }
 
-
+    /**
+     * 搜索笔记
+     */
+    suspend fun searchNotebook(input: String?): MutableList<Notebook> {
+        withContext(Dispatchers.IO) {
+            noteBookList = BaseApplication.db.notebookDao().searchNotebook(input)
+        }
+        return noteBookList
+    }
 
 }

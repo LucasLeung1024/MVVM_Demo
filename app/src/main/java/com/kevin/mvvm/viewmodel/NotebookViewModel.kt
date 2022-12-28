@@ -27,12 +27,16 @@ class NotebookViewModel : ViewModel() {
         NotebookRepository.deleteNotebook(*notebook as Array<out Notebook>)
     }
 
-//    /**
-//     * 搜索笔记
-//     * @param input 输入内容
-//     */
-//    fun searchNotebook(input: String?) {
-//        notebooks = NotebookRepository.searchNotebook(input)
-//    }
+    /**
+     * 搜索笔记
+     * @param input 输入内容
+     */
+    fun searchNotebook(input: String?) {
+        viewModelScope.launch {
+            val result = Result.success(NotebookRepository.searchNotebook(input))
+            // 发射数据，之后观察者就会收到数据，放在子线程中
+            notebooks.postValue(result)
+        }
+    }
 
 }

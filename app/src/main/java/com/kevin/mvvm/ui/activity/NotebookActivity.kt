@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -55,15 +57,36 @@ class NotebookActivity : BaseActivity(), View.OnClickListener {
         binding = ActivityNotebookBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        //初始化
+        initView()
+    }
+
+    private fun initView(){
         setStatusBar(true)
         setSupportActionBar(binding.toolbar)
         back(binding.toolbar)
-
         //监听事件
         binding.tvDelete.setOnClickListener(this)
         binding.tvAllSelected.setOnClickListener(this)
+        binding.ivClear.setOnClickListener(this)
         //初始化列表
         initList()
+        //输入框监听
+        binding.etSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable) {
+                if (s.isNotEmpty()) {
+                    binding.isSearch = true
+                    //搜索笔记
+                    vm.searchNotebook(s.toString())
+                } else {
+                    //获取全部笔记
+                    binding.isSearch = false
+                    vm.getNoteBooks()
+                }
+            }
+        })
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -82,6 +105,8 @@ class NotebookActivity : BaseActivity(), View.OnClickListener {
                 hasNotebook = false
             }
             binding.hasNotebook = hasNotebook
+            //是否显示搜索布局
+            binding.showSearchLay = hasNotebook || binding.etSearch.text.toString().isNotEmpty()
         }
     }
 
